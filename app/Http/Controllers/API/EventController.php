@@ -9,7 +9,7 @@ use App\Http\Resources\ApiResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\EventStoreRequest;
-
+use Exception;
 
 class EventController extends Controller
 {
@@ -20,7 +20,29 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        $events = Event::where('status_publish', '1')->latest()->paginate(5);
+        foreach ($events as $event) {
+            $event->image = $event->imagePath;
+        }
+        // return response()->json([
+        //     'status' => true,
+        //     'message' => 'List All Events',
+        //     'data' => $events->map(function ($event) {
+        //         return [
+        //             'id' => $event->id,
+        //             'user_id' => $event->user_id,
+        //             'image' => $event->image,
+        //             'title' => $event->title,
+        //             'slug' => $event->slug,
+        //             'body' => $event->body,
+        //             'status_publish' => $event->status_publish,
+        //             'created_at' => $event->created_at,
+        //             'updated_at' => $event->updated_at,
+        //         ];
+        //     }),
+
+        // ]);
+        return new ApiResource(True, 'List events', $events);
     }
 
     /**
@@ -42,25 +64,27 @@ class EventController extends Controller
     public function store(EventStoreRequest $request)
     {
         $request->validated();
+        try {
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
+            $destination = base_path('public/images/');
+            $request->file('image')->move($destination, $image);
 
-        $extension = $request->file('image')->getClientOriginalExtension();
-        $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-        $destination = base_path('public/images/');
-        $request->file('image')->move($destination, $image);
+            if (Auth::user()->hasRole('Admin')) {
+                $status = 1;
+            }
 
-        if (Auth::user()->hasRole('Admin')) {
-            $status = 1;
+            $event = Event::create([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+                'body' => $request->body,
+                'image' => $image,
+                'user_id' => Auth::user()->id,
+                'status_publish' => $status,
+            ]);
+        } catch (Exception $e) {
+            return new ApiResource(false, 'Error', $e);
         }
-
-        $event = Event::create([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'body' => $request->body,
-            'image' => $image,
-            'user_id' => Auth::user()->id,
-            'status_publish' => $status,
-        ]);
-
         return new ApiResource(true, 'Event Berhasil Ditambah', $event);
     }
 

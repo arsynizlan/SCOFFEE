@@ -8,15 +8,22 @@ use App\Http\Controllers\API\EventController;
 
 
 
+Route::group([], function () {
+    /** Login and Register */
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+    /** Get All Event */
+    Route::get('/events', [EventController::class, 'index']);
 
-// After Login
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/logout', [AuthController::class, 'logout']);
 
-    Route::group(['middleware' => ['role:Admin|Praktisi']], function () {
-        Route::post('/events', [EventController::class, 'store']);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        /** Logout */
+        Route::get('/logout', [AuthController::class, 'logout']);
+
+        /** Create Events */
+        Route::group(['middleware' => ['role:Admin|Praktisi']], function () {
+            Route::post('/events', [EventController::class, 'store']);
+        });
     });
 });
