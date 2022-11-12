@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id');
             $table->string('image');
             $table->string('title');
             $table->string('slug');
             $table->string('body');
+            $table->bigInteger('status_publish')->default('0');
             $table->timestamps();
         });
     }

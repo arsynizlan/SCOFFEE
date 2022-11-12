@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
-use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ApiResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,11 +16,12 @@ class AuthController extends Controller
     {
         $request->validated();
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $user->assignRole('User');
 
         return new ApiResource(true, 'Berhasil Register', 201);
     }
