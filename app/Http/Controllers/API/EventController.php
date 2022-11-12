@@ -96,7 +96,12 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        //
+        $event = Event::find($id);
+        $event->image = $event->imagePath;
+        if ($event->status_publish == 1) {
+            return new ApiResource(true, 'Details Event', $event);
+        }
+        return response()->json(new ApiResource(false, 'Event tidak ditemukan'), 404);
     }
 
     /**
@@ -130,6 +135,18 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $event = Event::find($id);
+        $oldImage = $event->image;
+        if ($oldImage) {
+            $pleaseRemove = base_path('public/images/') . $oldImage;
+
+            if (file_exists($pleaseRemove)) {
+                unlink($pleaseRemove);
+            }
+        }
+
+        Event::destroy($id);
+
+        return new ApiResource(true, 'Data Berhasil Dihapus', null);
     }
 }

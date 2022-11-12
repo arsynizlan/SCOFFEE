@@ -15,15 +15,18 @@ Route::group([], function () {
 
     /** Get All Event */
     Route::get('/events', [EventController::class, 'index']);
+    Route::get('/events/{id}', [EventController::class, 'show']);
 
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         /** Logout */
         Route::get('/logout', [AuthController::class, 'logout']);
 
-        /** Create Events */
         Route::group(['middleware' => ['role:Admin|Praktisi']], function () {
+            /** Create Events */
             Route::post('/events', [EventController::class, 'store']);
+            /** Delete Events */
+            Route::delete('/events/{id}', [EventController::class, 'destroy']);
         });
     });
 });
