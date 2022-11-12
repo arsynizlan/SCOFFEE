@@ -10,8 +10,7 @@ use App\Http\Controllers\API\EventController;
 
 Route::group([], function () {
     /** Login and Register */
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+    require __DIR__ . '/api/auth.php';
 
     /** Get All Event */
     Route::get('/events', [EventController::class, 'index']);
