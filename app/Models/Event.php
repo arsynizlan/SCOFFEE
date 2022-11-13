@@ -10,7 +10,7 @@ class Event extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'slug', 'body', 'image', 'user_id', 'status_publish'
+        'title', 'slug', 'body', 'image', 'date', 'user_id', 'status_publish'
     ];
 
     public function getImagePathAttribute()

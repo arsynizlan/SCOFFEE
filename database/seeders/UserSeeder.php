@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -20,6 +21,13 @@ class UserSeeder extends Seeder
             'name' => 'Arsy Nizlan Ramadhan',
             'email' => 'arsynizlan@gmail.com',
             'password' => Hash::make('arsynizlan'),
+        ]);
+        UserDetail::create([
+            'id' => $admin->id,
+            'description' => "Pelajar Dari Bandung",
+            'born' => "2002-12-04",
+            'academic' => "STM Pembangunan Bandung",
+            'academic' => "META .Inc",
         ]);
         $admin->assignRole('Admin');
     }
