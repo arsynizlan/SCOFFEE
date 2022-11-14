@@ -25,8 +25,11 @@ Route::group([], function () {
         /** Logout */
         Route::get('/logout', [AuthController::class, 'logout']);
 
+        /** Edit User */
+        Route::put('/user/{id}', [UserController::class, 'update']);
+
         /** Admin dan Praktisi */
-        Route::group(['middleware' => ['role:Admin|Praktisi']], function () {
+        Route::group(['middleware' => ['role:Admin|SuperAdmin']], function () {
             /**  Events */
             Route::post('/events', [EventController::class, 'store']);
             Route::put('/events/{id}', [EventController::class, 'update']);

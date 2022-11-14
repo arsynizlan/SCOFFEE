@@ -19,16 +19,16 @@ class UserSeeder extends Seeder
     {
         $admin = User::create([
             'name' => 'Arsy Nizlan Ramadhan',
-            'email' => 'arsynizlan@gmail.com',
-            'password' => Hash::make('arsynizlan'),
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('admin123'),
         ]);
         UserDetail::create([
             'id' => $admin->id,
             'description' => "Pelajar Dari Bandung",
             'born' => "2002-12-04",
             'academic' => "STM Pembangunan Bandung",
-            'academic' => "META .Inc",
+            'work' => "META .Inc",
         ]);
-        $admin->assignRole('Admin');
+        $admin->assignRole('SuperAdmin');
     }
 }

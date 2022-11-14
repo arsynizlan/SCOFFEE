@@ -61,13 +61,15 @@ class AuthController extends Controller
             return errorResponse(400, 'error', 'Email atau Password Salah!');
         }
 
-        $user = User::where('email', $request->email)->firstOrFail();
+        $user = User::select('id', 'name', 'email')->where('email', $request->email)->firstOrFail();
 
         $token = $user->createToken('auth-sanctum')->plainTextToken;
 
+        $role = Auth::user()->getRoleNames()[0];
         $data = [
             'token' => $token,
             'user' => $user,
+            'role' => $role
         ];
 
         return successResponse(200, 'success', 'Berhasil login', $data);

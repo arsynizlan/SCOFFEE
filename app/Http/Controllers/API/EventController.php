@@ -21,7 +21,7 @@ class EventController extends Controller
     {
         $events = Event::where('status_publish', '1')->latest()->paginate(5);
         foreach ($events as $event) {
-            $event->image = $event->imagePath;
+            $event->image = $event->imagePathEvent;
         }
         // return response()->json([
         //     'code' => 200,
@@ -78,10 +78,10 @@ class EventController extends Controller
         try {
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = base_path('public/images/');
+            $destination = base_path('public/images/events/');
             $request->file('image')->move($destination, $image);
 
-            if (Auth::user()->hasRole('Admin')) {
+            if (Auth::user()->hasRole('SuperAdmin')) {
                 $status = 1;
             }
             $event = Event::create([
@@ -109,11 +109,13 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         if (!$event) {
-            return errorResponse(404, 'error', 'Not Found');;
+            return errorResponse(404, 'error', 'Not Found');
         }
-        $event->image = $event->imagePath;
+        $event->image = $event->imagePathEvent;
         if ($event->status_publish == 1) {
             return successResponse(200, 'success', 'Detail Event', $event);
+        } else {
+            return errorResponse(404, 'error', 'Not Found');
         }
     }
 
@@ -137,6 +139,9 @@ class EventController extends Controller
     public function update(Request $request, $id)
     {
         $event = Event::find($id);
+        if (!$event) {
+            return errorResponse(404, 'error', 'Not Found');
+        }
         $rules = [
             'title' => 'required|max:255',
             'body' => 'required',
@@ -151,7 +156,7 @@ class EventController extends Controller
         if ($request->hasFile('image')) {
             $oldImage = $event->image;
             if ($oldImage) {
-                $pleaseRemove = base_path('public/images/') .  $oldImage;
+                $pleaseRemove = base_path('public/images/events/') .  $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
@@ -160,49 +165,28 @@ class EventController extends Controller
 
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = base_path('public/images/');
+            $destination = base_path('public/images/events/');
             $request->file('image')->move($destination, $image);
 
-            if ($request->status_publish) {
-                dd($request->status_publish);
-                $event->update([
-                    'title' => $request->title,
-                    'slug' => Str::slug($request->title),
-                    'date' => $request->date,
-                    'body' => $request->body,
-                    'image' => $image,
-                    'user_id' => Auth::user()->id,
-                    'status_publish' => $request->status_publish,
-                ]);
-            } else {
-                $event->update([
-                    'title' => $request->title,
-                    'slug' => Str::slug($request->title),
-                    'date' => $request->date,
-                    'body' => $request->body,
-                    'image' => $image,
-                    'user_id' => Auth::user()->id,
-                ]);
-            }
+            $event->update([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+                'date' => $request->date,
+                'body' => $request->body,
+                'image' => $image,
+                'user_id' => Auth::user()->id,
+                'status_publish' => $request->status_publish,
+            ]);
         } elseif (!$request->hasFile('image')) {
-            if ($request->status_publish) {
-                $event->update([
-                    'title' => $request->title,
-                    'slug' => Str::slug($request->title),
-                    'date' => $request->date,
-                    'body' => $request->body,
-                    'user_id' => Auth::user()->id,
-                    'status_publish' => $request->status_publish,
-                ]);
-            } else {
-                $event->update([
-                    'title' => $request->title,
-                    'slug' => Str::slug($request->title),
-                    'date' => $request->date,
-                    'body' => $request->body,
-                    'user_id' => Auth::user()->id,
-                ]);
-            }
+
+            $event->update([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+                'date' => $request->date,
+                'body' => $request->body,
+                'status_publish' => $request->status_publish,
+                'user_id' => Auth::user()->id,
+            ]);
         } else {
             return errorResponse('422', 'error', 'Event gagal disunting');
         }
@@ -223,7 +207,7 @@ class EventController extends Controller
         }
         $oldImage = $event->image;
         if ($oldImage) {
-            $pleaseRemove = base_path('public/images/') . $oldImage;
+            $pleaseRemove = base_path('public/images/events/') . $oldImage;
 
             if (file_exists($pleaseRemove)) {
                 unlink($pleaseRemove);

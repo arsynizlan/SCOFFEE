@@ -13,8 +13,8 @@ class Event extends Model
         'title', 'slug', 'body', 'image', 'date', 'user_id', 'status_publish'
     ];
 
-    public function getImagePathAttribute()
+    public function getImagePathEventAttribute()
     {
-        return URL::to('/') . '/images/' . $this->image;
+        return URL::to('/') . '/images/events/' . $this->image;
     }
 }
