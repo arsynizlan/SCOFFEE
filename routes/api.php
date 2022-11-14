@@ -6,10 +6,6 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\UserController;
 
-
-
-
-
 Route::group([], function () {
     /** Login and Register */
     require __DIR__ . '/api/auth.php';
