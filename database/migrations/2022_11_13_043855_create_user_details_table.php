@@ -14,13 +14,15 @@ class CreateUserDetailsTable extends Migration
     public function up()
     {
         Schema::create('user_details', function (Blueprint $table) {
-            $table->unsignedBigInteger('id');
+            // $table->unsignedBigInteger('id');
+            $table->id();
             $table->string('image')->nullable();
             $table->string('description')->nullable();
             $table->date('born')->nullable();
             $table->string('academic')->nullable();
             $table->string('work')->nullable();
-            $table->foreign('id')->references('id')->on('users')->onDelete('CASCADE')->onUpdate('CASCADE');
+            // $table->foreign('id')->references('id')->on('users')->onDelete('CASCADE')->onUpdate('CASCADE');
+            $table->foreignId('user_id')->constrained(); //untuk kolom foreignkey Standar penulisan komolnya dengan "namatable_id"
             $table->timestamps();
         });
     }

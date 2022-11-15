@@ -182,7 +182,7 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         if (!$event) {
-            return errorResponse(404, 'error', 'Not Found');;
+            return errorResponse(404, 'error', 'Not Found');
         }
         $oldImage = $event->image;
         if ($oldImage) {
