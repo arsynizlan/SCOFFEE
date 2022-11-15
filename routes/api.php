@@ -26,6 +26,7 @@ Route::group([], function () {
 
         /** Super Admin ONLY*/
         Route::group(['middleware' => ['role:SuperAdmin']], function () {
+            Route::get('/admin', [UserController::class, 'getAdmin']);
             Route::post('/admin', [UserController::class, 'store']);
         });
         /** SuperAdmin dan Admin */

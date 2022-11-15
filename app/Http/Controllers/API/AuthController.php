@@ -33,11 +33,8 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-            ]);
-            UserDetail::create([
-                'id' => $user->id,
-            ]);
-            $user->assignRole('User');
+            ])->assignRole('User')->user_detail()->create();
+
 
             $data = User::where('id', $user->id)->first();
 
