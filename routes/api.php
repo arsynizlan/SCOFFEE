@@ -3,8 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\API\EventController;
 
 Route::group([], function () {
     /** Login and Register */
@@ -30,6 +31,10 @@ Route::group([], function () {
             Route::get('/users', [UserController::class, 'getUser']);
             Route::get('/admin', [UserController::class, 'getAdmin']);
             Route::post('/admin', [UserController::class, 'store']);
+            Route::get('/category', [CategoryController::class, 'index']);
+            Route::post('/category', [CategoryController::class, 'store']);
+            Route::get('/category/{id}', [CategoryController::class, 'show']);
+            Route::post('/category/{id}', [CategoryController::class, 'update']);
             Route::delete('/user/{id}', [UserController::class, 'destroy']);
             Route::delete('/user/permanent/{id}', [UserController::class, 'destroyPermanent']);
         });
