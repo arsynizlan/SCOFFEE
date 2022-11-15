@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('image');
             $table->string('title');
             $table->string('slug');
-            $table->string('body');
+            $table->text('body');
             $table->date('date');
             $table->bigInteger('status_publish')->default('0');
             $table->timestamps();

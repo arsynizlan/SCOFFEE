@@ -28,6 +28,7 @@ Route::group([], function () {
         Route::group(['middleware' => ['role:SuperAdmin']], function () {
             Route::get('/admin', [UserController::class, 'getAdmin']);
             Route::post('/admin', [UserController::class, 'store']);
+            Route::delete('/user/{id}', [UserController::class, 'destroy']);
         });
         /** SuperAdmin dan Admin */
         Route::group(['middleware' => ['role:Admin|SuperAdmin']], function () {
