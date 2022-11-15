@@ -23,7 +23,13 @@ class UserSeeder extends Seeder
             'name' => 'Arsy Nizlan Ramadhan',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
-        ])->assignRole('SuperAdmin');
+        ])->assignRole('SuperAdmin')->user_detail()->create([
+            'image' => $faker->imageUrl(50, 50, 'profile'),
+            'description' => $faker->paragraph($faker->numberBetween(2, 5)),
+            'born' => $faker->date(),
+            'academic' => $faker->randomElement((['Baru Lulus S1', 'Masih Semester 1', 'Maba Mahasiswa Baheula', 'Baru Semester 12'])),
+            'work' => $faker->jobTitle()
+        ]);;
 
         User::create([
             'name' => $faker->name(),

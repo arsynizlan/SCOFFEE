@@ -19,9 +19,21 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getAdmin()
     {
-        //
+
+        $admin = User::role('Admin')->get();
+        if ($admin) {
+            return successResponse(200, 'success', 'All Admin', $admin);
+        }
+        return errorResponse(404, 'error', 'Not Found');
+    }
+
+    public function getUser()
+    {
+
+        $admin = User::role('Admin')->get();
+        return successResponse(200, 'success', 'All Admin', $admin);
     }
 
     /**
@@ -59,11 +71,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-            ]);
-            UserDetail::create([
-                'id' => $user->id,
-            ]);
-            $user->assignRole('Admin');
+            ])->assignRole('Admin')->user_detail()->create();
 
             $data = User::where('id', $user->id)->first();
 
@@ -81,9 +89,10 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find('id', $id);
+        $user = User::select('id', 'name', 'email')->find($id);
         if ($user) {
             $user->user_detail->image = $user->user_detail->imagePathProfile;
+            $user->roles = User::find($user->id)->getRoleNames()[0];
             $data = [
                 'user' => $user,
             ];

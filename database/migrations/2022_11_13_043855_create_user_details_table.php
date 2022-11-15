@@ -22,7 +22,7 @@ class CreateUserDetailsTable extends Migration
             $table->string('academic')->nullable();
             $table->string('work')->nullable();
             // $table->foreign('id')->references('id')->on('users')->onDelete('CASCADE')->onUpdate('CASCADE');
-            $table->foreignId('user_id')->constrained(); //untuk kolom foreignkey Standar penulisan komolnya dengan "namatable_id"
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('CASCADE')->onUpdate('CASCADE'); //untuk kolom foreignkey Standar penulisan komolnya dengan "namatable_id"
             $table->timestamps();
         });
     }
