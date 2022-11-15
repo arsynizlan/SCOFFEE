@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AuthSeeder::class,
             UserSeeder::class,
+            EventsSeeder::class,
         ]);
     }
 }
