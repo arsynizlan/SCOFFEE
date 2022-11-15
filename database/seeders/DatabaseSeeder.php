@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             EventsSeeder::class,
         ]);
+        // $collect = collect(User::all());
+        // dd($collect);
     }
 }
