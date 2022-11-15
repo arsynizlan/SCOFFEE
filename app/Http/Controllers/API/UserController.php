@@ -30,11 +30,12 @@ class UserController extends Controller
         return errorResponse(404, 'error', 'Not Found');
     }
 
+
     public function getUser()
     {
 
-        $admin = User::role('Admin')->get();
-        return successResponse(200, 'success', 'All Admin', $admin);
+        $users = User::role('Admin')->get();
+        return successResponse(200, 'success', 'All User', $users);
     }
 
     /**
@@ -211,6 +212,18 @@ class UserController extends Controller
             });
 
             return successResponse(202, 'success', 'Berhasil Hapus Pengguna', null);
+        } catch (Exception $e) {
+            return errorResponse(400, 'error', $e);
+        }
+    }
+    public function destroyPermanent($id)
+    {
+        try {
+            DB::transaction(function () use ($id) {
+                User::where('id', $id)->forceDelete();
+            });
+
+            return successResponse(202, 'success', 'Berhasil Hapus Pengguna Permanen', null);
         } catch (Exception $e) {
             return errorResponse(400, 'error', $e);
         }
