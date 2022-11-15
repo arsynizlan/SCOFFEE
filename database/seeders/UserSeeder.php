@@ -54,6 +54,6 @@ class UserSeeder extends Seeder
             'academic' => $faker->randomElement((['Baru Lulus S1', 'Masih Semester 1', 'Maba Mahasiswa Baheula', 'Baru Semester 12'])),
             'work' => $faker->jobTitle()
         ]);
-        UserDetail::factory(1000)->create();
+        UserDetail::factory(100)->create();
     }
 }

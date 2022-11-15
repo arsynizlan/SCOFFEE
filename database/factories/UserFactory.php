@@ -50,7 +50,8 @@ class UserFactory extends Factory
         return $this->afterMaking(function (User $user) {
             //
         })->afterCreating(function (User $user) {
-            $user->assignrole('Admin');
+            $roles = User::role('Admin')->get()->count();
+            ($roles < 5) ?  $user->assignrole('Admin') : $user->assignrole('User');
         });
     }
 }
