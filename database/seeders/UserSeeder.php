@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'name' => 'Arsy Nizlan Ramadhan',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
-        ])->assignRole('SuperAdmin')->userdetail()->create([
+        ])->assignRole('SuperAdmin')->user_detail()->create([
             'image' => $faker->imageUrl(50, 50, 'profile'),
             'description' => $faker->paragraph($faker->numberBetween(2, 5)),
             'born' => $faker->date(),
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             'name' => $faker->name(),
             'email' => 'praktisi@gmail.com',
             'password' => Hash::make('password'),
-        ])->assignRole('Admin')->userdetail()->create([
+        ])->assignRole('Admin')->user_detail()->create([
             'image' => $faker->imageUrl(50, 50, 'profile'),
             'description' => $faker->paragraph($faker->numberBetween(2, 5)),
             'born' => $faker->date(),
@@ -47,7 +47,7 @@ class UserSeeder extends Seeder
             'name' => $faker->name(),
             'email' => 'user@gmail.com',
             'password' => Hash::make('password'),
-        ])->assignRole('User')->userdetail()->create([
+        ])->assignRole('User')->user_detail()->create([
             'image' => $faker->imageUrl(50, 50, 'profile'),
             'description' => $faker->paragraph($faker->numberBetween(2, 5)),
             'born' => $faker->date(),
