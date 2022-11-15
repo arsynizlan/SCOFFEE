@@ -17,7 +17,7 @@ class CreateUserDetailsTable extends Migration
             // $table->unsignedBigInteger('id');
             $table->id();
             $table->string('image')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->date('born')->nullable();
             $table->string('academic')->nullable();
             $table->string('work')->nullable();
