@@ -24,7 +24,11 @@ Route::group([], function () {
         /** Edit User */
         Route::put('/user/{id}', [UserController::class, 'update']);
 
-        /** Admin dan Praktisi */
+        /** Super Admin ONLY*/
+        Route::group(['middleware' => ['role:SuperAdmin']], function () {
+            Route::post('/admin', [UserController::class, 'store']);
+        });
+        /** SuperAdmin dan Admin */
         Route::group(['middleware' => ['role:Admin|SuperAdmin']], function () {
             /**  Events */
             Route::post('/events', [EventController::class, 'store']);

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -41,7 +42,35 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // ADD ADMIN
+        $rules = [
+            'name'     => 'required',
+            'email'     => 'required|email|unique:users,email',
+            'password'  => 'required|min:8',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return errorResponse(400, 'error', $validator->errors());
+        }
+
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+            UserDetail::create([
+                'id' => $user->id,
+            ]);
+            $user->assignRole('Admin');
+
+            $data = User::where('id', $user->id)->first();
+
+            return successResponse(201, 'success', 'Berhasil Tambah Admin', $data);
+        } catch (Exception $e) {
+            return errorResponse(400, 'error', $e);
+        }
     }
 
     /**
@@ -52,12 +81,16 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::select('id', 'name', 'email')->with('user_detail')->find($id);
-        $user->user_detail->image = $user->user_detail->imagePathProfile;
+        $user = User::find('id', $id);
         if ($user) {
-            return successResponse(200, 'success', 'User Detail', $user);
+            $user->user_detail->image = $user->user_detail->imagePathProfile;
+            $data = [
+                'user' => $user,
+            ];
+            return successResponse(200, 'success', 'User Detail', $data);
+        } else {
+            return errorResponse(404, 'error', 'User Tidak Ditemukan');
         }
-        return errorResponse(404, 'error', 'User Tidak Ditemukan');
     }
 
     /**

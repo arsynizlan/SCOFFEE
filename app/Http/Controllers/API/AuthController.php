@@ -6,12 +6,10 @@ use Exception;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
-use App\Http\Resources\ApiResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\AuthRegisterRequest;
 
 class AuthController extends Controller
 {
@@ -29,6 +27,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return errorResponse(400, 'error', $validator->errors());
         }
+
         try {
             $user = User::create([
                 'name' => $request->name,
