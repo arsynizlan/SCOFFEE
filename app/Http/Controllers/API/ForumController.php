@@ -21,7 +21,21 @@ class ForumController extends Controller
      */
     public function index()
     {
-        //
+        $forum = DB::table('forums')
+            ->join('categories', 'forums.category_id', '=', 'categories.id')
+            ->join('contexts', 'forums.context_id', '=', 'contexts.id')
+            ->join('users', 'forums.user_id', '=', 'users.id')
+            ->select(
+                'forums.id',
+                'users.name as user',
+                'categories.name as category',
+                'contexts.name as context',
+                'forums.title',
+                'forums.description',
+                'forums.image as image',
+            )
+            ->latest('id')->paginate(5, ['forums.id'], 'link');
+        return successResponse(200, 'success', 'Forums', $forum);
     }
 
     /**
