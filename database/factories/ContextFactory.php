@@ -17,7 +17,7 @@ class ContextFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->randomElement((['Diskusi', 'Berita', 'Usaha', 'Info', 'Daging'])),
+            'name' => fake()->unique()->randomElement((['Diskusi', 'Berita', 'Usaha', 'Info', 'Daging'])),
             'image' => fake()->imageUrl('50', '50', 'Contex')
         ];
     }

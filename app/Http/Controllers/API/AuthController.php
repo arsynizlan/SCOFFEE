@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return errorResponse(400, 'error', $validator->errors());
+            return errorResponse(422, 'error', $validator->errors());
         }
 
         try {
@@ -54,7 +54,7 @@ class AuthController extends Controller
         if (!Auth::attempt(
             $request->only('email', 'password')
         )) {
-            return errorResponse(400, 'error', 'Email atau Password Salah!');
+            return errorResponse(400, 'error', 'Email atau Password Salah!'); //masih bingun mau 400 atau 422
         }
 
         $user = User::select('id', 'name', 'email')->where('email', $request->email)->firstOrFail();

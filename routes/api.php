@@ -25,14 +25,11 @@ Route::group([], function () {
         /** Edit User */
         Route::put('/user/{id}', [UserController::class, 'update']);
 
+        require __DIR__ . '/api/forum.php';
 
         /** Super Admin ONLY*/
         Route::group(['middleware' => ['role:SuperAdmin']], function () {
-
-
             require __DIR__ . '/api/category.php';
-
-
             Route::get('/listevents', [EventController::class, 'Events']);
             Route::get('/users', [UserController::class, 'getUser']);
             Route::get('/admin', [UserController::class, 'getAdmin']);

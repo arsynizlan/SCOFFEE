@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('forums', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('users_id');
-            $table->bigInteger('categories_id');
-            $table->bigInteger('contexts_id');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('context_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->text('description');
             $table->string('image');
