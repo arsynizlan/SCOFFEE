@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\EventController;
 
 Route::group([], function () {
@@ -35,6 +35,7 @@ Route::group([], function () {
             Route::post('/category', [CategoryController::class, 'store']);
             Route::get('/category/{id}', [CategoryController::class, 'show']);
             Route::post('/category/{id}', [CategoryController::class, 'update']);
+            Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
             Route::delete('/user/{id}', [UserController::class, 'destroy']);
             Route::delete('/user/permanent/{id}', [UserController::class, 'destroyPermanent']);
         });

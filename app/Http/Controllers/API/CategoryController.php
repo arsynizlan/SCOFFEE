@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use Exception;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -39,7 +40,7 @@ class CategoryController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return errorResponse(400, 'error', $validator->errors());
+            return errorResponse(422, 'error', $validator->errors());
         }
 
         try {
@@ -84,9 +85,49 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        dd($category);
+        $rules = [
+            'name'     => 'required',
+            'image'     => 'required|image',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return errorResponse(422, 'error', $validator->errors());
+        }
+
+        $category = Category::find($id)->first();
+        try {
+            if ($request->hasFile('image')) {
+                $oldImage = $category->image;
+                if ($oldImage == null) {
+
+                    $extension = $request->file('image')->getClientOriginalExtension();
+                    $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
+                    $destination = base_path('public/images/category/');
+                    $request->file('image')->move($destination, $image);
+
+                    Category::where('id', $id)->update([
+                        'name' => $request->name,
+                        'image' => $image,
+                    ]);
+                } elseif ($oldImage) {
+                    $pleaseRemove = base_path('public/images/category/') . $oldImage;
+                    if (file_exists($pleaseRemove)) {
+                        unlink($pleaseRemove);
+                    }
+
+                    $extension = $request->file('image')->getClientOriginalExtension();
+                    $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
+                    $destination = base_path('public/images/category/');
+                    $request->file('image')->move($destination, $image);
+                }
+            }
+            return successResponse(200, 'success', 'Tampil Category ' . $category->name, $category);
+        } catch (Exception $e) {
+            return errorResponse(400, 'error', $e);
+        }
     }
 
     /**
@@ -95,8 +136,16 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        try {
+            DB::transaction(function () use ($id) {
+                Category::where('id', $id)->delete();
+            });
+
+            return successResponse(202, 'success', 'Berhasil Hapus Category', null);
+        } catch (Exception $e) {
+            return errorResponse(400, 'error', $e);
+        }
     }
 }
