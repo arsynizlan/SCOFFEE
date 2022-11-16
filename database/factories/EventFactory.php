@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\UserDetail;
 use DB;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
@@ -23,7 +24,7 @@ class EventFactory extends Factory
         $model = DB::table('users')
             ->join('roles', 'users.id', '=', 'roles.id')
             ->where('roles.name', '=', 'Admin')
-            ->first()->id;
+            ->get()->random()->id;
         $title = fake()->sentence(fake()->numberBetween(4, 5));
         return [
             'user_id' => $model,

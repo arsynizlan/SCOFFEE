@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use Event;
+use Faker\Factory;
 use App\Models\User;
 use App\Models\UserDetail;
-use Faker\Factory;
 use Illuminate\Database\Seeder;
+use App\Models\Event as ModelEvent;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -54,6 +56,7 @@ class UserSeeder extends Seeder
             'academic' => $faker->randomElement((['Baru Lulus S1', 'Masih Semester 1', 'Maba Mahasiswa Baheula', 'Baru Semester 12'])),
             'work' => $faker->jobTitle()
         ]);
-        UserDetail::factory(5)->create();
+        // UserDetail::factory(100)->has(ModelEvent::factory()->count(1))->create();
+        UserDetail::factory(10)->create();
     }
 }

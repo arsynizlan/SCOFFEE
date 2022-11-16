@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\EventController;
 
 Route::group([], function () {
     /** Login and Register */
@@ -27,6 +28,11 @@ Route::group([], function () {
 
         /** Super Admin ONLY*/
         Route::group(['middleware' => ['role:SuperAdmin']], function () {
+
+
+            require __DIR__ . '/api/category.php';
+
+
             Route::get('/listevents', [EventController::class, 'Events']);
             Route::get('/users', [UserController::class, 'getUser']);
             Route::get('/admin', [UserController::class, 'getAdmin']);
