@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\EventController;
@@ -25,8 +24,10 @@ Route::group([], function () {
         /** Edit User */
         Route::put('/user/{id}', [UserController::class, 'update']);
 
+
         /** Super Admin ONLY*/
         Route::group(['middleware' => ['role:SuperAdmin']], function () {
+            Route::get('/listevents', [EventController::class, 'Events']);
             Route::get('/users', [UserController::class, 'getUser']);
             Route::get('/admin', [UserController::class, 'getAdmin']);
             Route::post('/admin', [UserController::class, 'store']);

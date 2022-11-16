@@ -93,7 +93,8 @@ class UserController extends Controller
     {
         $user = User::select('id', 'name', 'email')->find($id);
         if ($user) {
-            $user->user_detail->image = $user->user_detail->imagePathProfile;
+            $user->user_detail->image;
+            // $user->user_detail->image = $user->user_detail->imagePathProfile;
             $user->roles = User::find($user->id)->getRoleNames()[0];
             $data = [
                 'user' => $user,
@@ -207,6 +208,10 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
+            $user = User::find($id);
+            if (!$user) {
+                return errorResponse(404, 'error', 'Not Found');
+            }
             DB::transaction(function () use ($id) {
                 User::where('id', $id)->delete();
             });
@@ -219,6 +224,10 @@ class UserController extends Controller
     public function destroyPermanent($id)
     {
         try {
+            $user = User::withTrashed()->find($id);
+            if (!$user) {
+                return errorResponse(404, 'error', 'Not Found');
+            }
             DB::transaction(function () use ($id) {
                 User::where('id', $id)->forceDelete();
             });

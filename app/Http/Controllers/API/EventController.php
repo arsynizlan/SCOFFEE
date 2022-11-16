@@ -20,9 +20,9 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::where('status_publish', '1')->latest()->paginate(5);
-        foreach ($events as $event) {
-            $event->image = $event->imagePathEvent;
-        }
+        // foreach ($events as $event) {
+        //     $event->image = $event->imagePathEvent;
+        // }
         // return response()->json([
         //     'code' => 200,
         //     'status' => 'success',
@@ -42,6 +42,15 @@ class EventController extends Controller
         //     }),
 
         // ]);
+        return successResponse(200, 'success', 'List Event', $events);
+    }
+
+    public function Events()
+    {
+        $events = Event::latest()->paginate(5);
+        // foreach ($events as $event) {
+        //     $event->image = $event->imagePathEvent;
+        // }
         return successResponse(200, 'success', 'List Event', $events);
     }
 
@@ -97,11 +106,24 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::find($id);
+        if (is_numeric($id)) {
+            $event = Event::find($id);
+            if (!$event) {
+                return errorResponse(404, 'error', 'Not Found');
+            }
+            // $event->image = $event->imagePathEvent;
+            if ($event->status_publish == 1) {
+                return successResponse(200, 'success', 'Detail Event', $event);
+            } else {
+                return errorResponse(404, 'error', 'Not Found');
+            }
+        }
+
+        $event = Event::where('slug', $id)->first();
         if (!$event) {
             return errorResponse(404, 'error', 'Not Found');
         }
-        $event->image = $event->imagePathEvent;
+        // $event->image = $event->imagePathEvent;
         if ($event->status_publish == 1) {
             return successResponse(200, 'success', 'Detail Event', $event);
         } else {
