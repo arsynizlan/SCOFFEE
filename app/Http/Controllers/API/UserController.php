@@ -34,7 +34,7 @@ class UserController extends Controller
     public function getUser()
     {
 
-        $users = User::role('Admin')->get();
+        $users = User::role('User')->get();
         return successResponse(200, 'success', 'All User', $users);
     }
 

@@ -33,7 +33,7 @@ class ForumController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'categories_id' => 'required',
+            'category_id' => 'required',
             'context_id' => 'required',
             'title' => 'required',
             'description' => 'required',
@@ -56,7 +56,7 @@ class ForumController extends Controller
             // dd('masuk');
             $event = Forum::create([
                 'user_id' => auth()->user()->id,
-                'category_id' => $request->categories_id,
+                'category_id' => $request->category_id,
                 'context_id' => $request->context_id,
                 'title' => $request->title,
                 'description' => $request->description,

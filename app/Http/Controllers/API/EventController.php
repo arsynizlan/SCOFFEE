@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Event;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +20,23 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::where('status_publish', '1')->latest()->paginate(5);
+        $events = DB::table('events')
+            ->where('status_publish', '1')
+            ->join('users', 'events.user_id', '=', 'users.id')
+            ->select(
+                'events.id',
+                'users.name as author',
+                'events.image',
+                'events.title',
+                'events.slug',
+                'events.body',
+                'events.date',
+                'events.status_publish',
+                'events.created_at',
+                'events.updated_at'
+            )
+            ->latest()->simplePaginate(5);
+        // $events = Event::where('status_publish', '1')->latest()->paginate(5);
         // foreach ($events as $event) {
         //     $event->image = $event->imagePathEvent;
         // }
@@ -47,7 +64,22 @@ class EventController extends Controller
 
     public function Events()
     {
-        $events = Event::latest()->paginate(5);
+        $events = DB::table('events')
+            ->join('users', 'events.user_id', '=', 'users.id')
+            ->select(
+                'events.id',
+                'users.name as author',
+                'events.image',
+                'events.title',
+                'events.slug',
+                'events.body',
+                'events.date',
+                'events.status_publish',
+                'events.created_at',
+                'events.updated_at'
+            )
+            ->latest()->Paginate(5);
+        // $events = Event::latest()->paginate(5);
         // foreach ($events as $event) {
         //     $event->image = $event->imagePathEvent;
         // }
@@ -107,7 +139,21 @@ class EventController extends Controller
     public function show($id)
     {
         if (is_numeric($id)) {
-            $event = Event::find($id);
+
+            $event = Event::where('events.id', $id)
+                ->join('users', 'events.user_id', '=', 'users.id')
+                ->select(
+                    'events.id',
+                    'users.name as author',
+                    'events.image',
+                    'events.title',
+                    'events.slug',
+                    'events.body',
+                    'events.date',
+                    'events.status_publish',
+                    'events.created_at',
+                    'events.updated_at'
+                )->first();
             if (!$event) {
                 return errorResponse(404, 'error', 'Not Found');
             }
@@ -119,7 +165,20 @@ class EventController extends Controller
             }
         }
 
-        $event = Event::where('slug', $id)->first();
+        $event = Event::where('slug', $id)
+            ->join('users', 'events.user_id', '=', 'users.id')
+            ->select(
+                'events.id',
+                'users.name as author',
+                'events.image',
+                'events.title',
+                'events.slug',
+                'events.body',
+                'events.date',
+                'events.status_publish',
+                'events.created_at',
+                'events.updated_at'
+            )->first();
         if (!$event) {
             return errorResponse(404, 'error', 'Not Found');
         }
