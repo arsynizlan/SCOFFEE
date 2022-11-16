@@ -12,11 +12,11 @@ class Forum extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'categorys_id', 'id');
+        return $this->belongsToMany(Category::class, 'category_id', 'id');
     }
 
     public function context()
     {
-        return $this->belongsTo(Context::class, 'contexts_id', 'id');
+        return $this->belongsTo(Context::class, 'context_id', 'id');
     }
 }

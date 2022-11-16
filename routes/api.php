@@ -26,6 +26,7 @@ Route::group([], function () {
         Route::put('/user/{id}', [UserController::class, 'update']);
 
         require __DIR__ . '/api/forum.php';
+        require __DIR__ . '/api/comment.php';
 
         /** Super Admin ONLY*/
         Route::group(['middleware' => ['role:SuperAdmin']], function () {

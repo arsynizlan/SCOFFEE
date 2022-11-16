@@ -15,6 +15,6 @@ class ContextSeeder extends Seeder
      */
     public function run()
     {
-        Context::factory(5)->create();
+        // Context::factory(5)->create();
     }
 }

@@ -1,9 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+
+use Exception;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
 
 class CommentController extends Controller
 {
@@ -18,16 +23,6 @@ class CommentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -35,7 +30,22 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $rules = [
+                'categories_id' => 'required',
+                'context_id' => 'required',
+                'title' => 'required',
+                'description' => 'required',
+                'image' => 'image',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return errorResponse(422, 'error', $validator->errors());
+            }
+        } catch (Exception $e) {
+            dd($asik);
+        }
     }
 
     /**

@@ -17,8 +17,8 @@ class UserDetail extends Model
         return URL::to('/') . '/images/profile/' . $this->image;
     }
 
-    // public function event()
-    // {
-    //     return $this->hasMany(ModelsEvent::class, 'user_id', 'user_id');
-    // }
+    public function forum()
+    {
+        return $this->hasMany(Forum::class, 'user_id', 'user_id');
+    }
 }
