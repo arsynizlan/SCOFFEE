@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 
 use Exception;
 use App\Models\Forum;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -113,7 +114,53 @@ class ForumController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $rules = [
+            'category_id' => 'required',
+            'context_id' => 'required',
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'image',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return errorResponse(422, 'error', $validator->errors());
+        }
+
+        try {
+            $postingan = Forum::findOrFail($id);
+            if ($request->hasFile('image')) {
+                $oldImage = $postingan->image;
+                if ($oldImage == null) {
+
+                    $extension = $request->file('image')->getClientOriginalExtension();
+                    $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
+                    $destination = base_path('public/images/posting/');
+                    $request->file('image')->move($destination, $image);
+
+                    Category::where('id', $id)->update([
+                        'category_id' => $request->categories_id,
+                        'context_id' => $request->context_id,
+                        'title' => $request->title,
+                        'description' => $request->description,
+                        'image' => $image,
+                    ]);
+                } elseif ($oldImage) {
+                    $pleaseRemove = base_path('public/images/posting/') . $oldImage;
+                    if (file_exists($pleaseRemove)) {
+                        unlink($pleaseRemove);
+                    }
+
+                    $extension = $request->file('image')->getClientOriginalExtension();
+                    $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
+                    $destination = base_path('public/images/posting/');
+                    $request->file('image')->move($destination, $image);
+                }
+            }
+            return successResponse(200, 'success', 'Tampil Category ', $postingan);
+        } catch (Exception $e) {
+            return errorResponse(404, 'error', 'Data Not Found');
+        }
     }
 
     /**
