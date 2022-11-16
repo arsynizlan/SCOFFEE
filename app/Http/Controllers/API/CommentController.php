@@ -32,11 +32,7 @@ class CommentController extends Controller
     {
         try {
             $rules = [
-                'categories_id' => 'required',
-                'context_id' => 'required',
-                'title' => 'required',
-                'description' => 'required',
-                'image' => 'image',
+                'pesan' => 'required|max:255',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -44,7 +40,7 @@ class CommentController extends Controller
                 return errorResponse(422, 'error', $validator->errors());
             }
         } catch (Exception $e) {
-            dd($asik);
+            // dd($asik);
         }
     }
 
