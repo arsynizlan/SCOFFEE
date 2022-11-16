@@ -28,14 +28,11 @@ Route::group([], function () {
 
         /** Super Admin ONLY*/
         Route::group(['middleware' => ['role:SuperAdmin']], function () {
+            require __DIR__ . '/api/category.php';
+
             Route::get('/users', [UserController::class, 'getUser']);
             Route::get('/admin', [UserController::class, 'getAdmin']);
             Route::post('/admin', [UserController::class, 'store']);
-            Route::get('/category', [CategoryController::class, 'index']);
-            Route::post('/category', [CategoryController::class, 'store']);
-            Route::get('/category/{id}', [CategoryController::class, 'show']);
-            Route::post('/category/{id}', [CategoryController::class, 'update']);
-            Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
             Route::delete('/user/{id}', [UserController::class, 'destroy']);
             Route::delete('/user/permanent/{id}', [UserController::class, 'destroyPermanent']);
         });

@@ -139,13 +139,28 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         try {
+            Category::findOrFail($id);
             DB::transaction(function () use ($id) {
                 Category::where('id', $id)->delete();
             });
-
             return successResponse(202, 'success', 'Berhasil Hapus Category', null);
         } catch (Exception $e) {
             return errorResponse(400, 'error', $e);
         }
+    }
+
+
+    /**
+     * count category row
+     *
+     * @return void
+     */
+    public function counts()
+    {
+        $category = Category::all()->count();
+        if ($category) {
+            return successResponse(200, 'success', 'All Category', $category);
+        }
+        return errorResponse(404, 'error', 'Not Found');
     }
 }
