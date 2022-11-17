@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Education;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +20,20 @@ class EducationController extends Controller
      */
     public function index()
     {
-        //
+        $educations = DB::table('educations')
+            ->join('users', 'educations.user_id', '=', 'users.id')
+            ->select(
+                'educations.id',
+                'users.name as author',
+                'educations.image',
+                'educations.title',
+                'educations.slug',
+                'educations.body',
+                'educations.created_at',
+                'educations.updated_at'
+            )
+            ->latest()->paginate(5);
+        return successResponse(200, 'success', 'List Edukasi', $educations);
     }
 
     /**
@@ -80,7 +94,26 @@ class EducationController extends Controller
      */
     public function show($id)
     {
-        //
+        if (is_numeric($id)) {
+
+            $educations = Education::where('educations.id', $id)
+                ->join('users', 'educations.user_id', '=', 'users.id')
+                ->select(
+                    'educations.id',
+                    'users.name as author',
+                    'educations.image',
+                    'educations.title',
+                    'educations.slug',
+                    'educations.body',
+                    'educations.created_at',
+                    'educations.updated_at'
+                )->first();
+
+            if (!$educations) {
+                return errorResponse(404, 'error', 'Not Found');
+            }
+            return successResponse(200, 'success', 'Detail Edukasi', $educations);
+        }
     }
 
     /**
