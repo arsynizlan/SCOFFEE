@@ -117,6 +117,8 @@ class UserController extends Controller
         $rules = [
             'name' => 'required',
             'email' => ['required', Rule::unique('users', 'email')->ignore($id)]
+            // or
+            // 'email' => 'required|email|unique:users,email,' . auth()->user()->id,
         ];
 
         $validator = Validator::make($request->all(), $rules);
