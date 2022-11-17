@@ -3,8 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\EventController;
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\EducationController;
 
 Route::group([], function () {
     /** Login and Register */
@@ -14,6 +15,8 @@ Route::group([], function () {
     Route::get('/events', [EventController::class, 'index']);
     Route::get('/events/{id}', [EventController::class, 'show']);
 
+    /** Get All Education */
+    Route::get('/education', [EducationController::class, 'index']);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         /** Logout */
@@ -28,9 +31,14 @@ Route::group([], function () {
         require __DIR__ . '/api/forum.php';
         require __DIR__ . '/api/comment.php';
 
+        Route::group(['middleware' => ['role:Admin']], function () {
+            require __DIR__ . '/api/education.php';
+        });
+
         /** Super Admin ONLY*/
         Route::group(['middleware' => ['role:SuperAdmin']], function () {
             require __DIR__ . '/api/category.php';
+
             Route::get('/listevents', [EventController::class, 'Events']);
             Route::get('/users', [UserController::class, 'getUser']);
             Route::get('/admin', [UserController::class, 'getAdmin']);
