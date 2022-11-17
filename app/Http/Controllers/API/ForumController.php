@@ -15,20 +15,19 @@ use Illuminate\Support\Facades\Validator;
 class ForumController extends Controller
 {
     /**
-     * Dispalay forum by category
+     * Dispalay forum with comment
      *
      * @param  mixed $request
      * @return void
      */
     // public function groupCategory($category)
-    public function groupCategory(Request $request)
+    public function forumComment($id)
     {
-        // dd($category);
-        $category = $request->category;
         $forum = DB::table('forums')
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->join('contexts', 'forums.context_id', '=', 'contexts.id')
             ->join('users', 'forums.user_id', '=', 'users.id')
+            ->join('comments', 'forums.id', '=', 'comments.forum_id')
             ->select(
                 'forums.id',
                 'users.name as user',
@@ -37,10 +36,26 @@ class ForumController extends Controller
                 'forums.title',
                 'forums.description',
                 'forums.image as image',
+                'comments.content',
             )
-            ->where('categories.name', '=', $category)
-            ->latest('id')->paginate(5, ['forums.id'], 'asik');
-        return successResponse(200, 'success', 'Forum by category ' . $category, $forum);
+            ->where('forums.id', '=', $id)
+            ->first();
+        $comments = DB::table('comments')
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->join('forums', 'comments.forum_id', '=', 'forums.id')
+            ->select(
+                'users.name as user',
+                'comments.content',
+                'comments.created_at'
+            )
+            ->where('forums.id', '=', $id)
+            ->latest('comments.id')->paginate(5,);
+
+        $data = [
+            'forums' => $forum,
+            'comments' => $comments,
+        ];
+        return successResponse(200, 'success', 'Forum with comment', $data);
     }
     /**
      * Display a listing of the resource.
