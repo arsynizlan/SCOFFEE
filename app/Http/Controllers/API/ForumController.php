@@ -27,7 +27,6 @@ class ForumController extends Controller
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->join('contexts', 'forums.context_id', '=', 'contexts.id')
             ->join('users', 'forums.user_id', '=', 'users.id')
-            ->join('comments', 'forums.id', '=', 'comments.forum_id')
             ->select(
                 'forums.id',
                 'users.name as user',
@@ -36,7 +35,6 @@ class ForumController extends Controller
                 'forums.title',
                 'forums.description',
                 'forums.image as image',
-                'comments.content',
             )
             ->where('forums.id', '=', $id)
             ->first();
