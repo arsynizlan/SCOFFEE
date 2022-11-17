@@ -15,12 +15,63 @@ use Illuminate\Support\Facades\Validator;
 class ForumController extends Controller
 {
     /**
+     * Dispalay forum by category
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    // public function groupCategory($category)
+    public function groupCategory(Request $request)
+    {
+        // dd($category);
+        $category = $request->category;
+        $forum = DB::table('forums')
+            ->join('categories', 'forums.category_id', '=', 'categories.id')
+            ->join('contexts', 'forums.context_id', '=', 'contexts.id')
+            ->join('users', 'forums.user_id', '=', 'users.id')
+            ->select(
+                'forums.id',
+                'users.name as user',
+                'categories.name as category',
+                'contexts.name as context',
+                'forums.title',
+                'forums.description',
+                'forums.image as image',
+            )
+            ->where('categories.name', '=', $category)
+            ->latest('id')->paginate(5, ['forums.id'], 'asik');
+        return successResponse(200, 'success', 'Forum by category ' . $category, $forum);
+    }
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->category) {
+            $category = $request->category;
+            $forum = DB::table('forums')
+                ->join('categories', 'forums.category_id', '=', 'categories.id')
+                ->join('contexts', 'forums.context_id', '=', 'contexts.id')
+                ->join('users', 'forums.user_id', '=', 'users.id')
+                ->select(
+                    'forums.id',
+                    'users.name as user',
+                    'categories.name as category',
+                    'contexts.name as context',
+                    'forums.title',
+                    'forums.description',
+                    'forums.image as image',
+                )
+                ->where('categories.name', '=', $category)
+                ->latest('id')->paginate(5, ['forums.id'], 'asik');
+            // dd($forum->total());
+            if ($forum->total() == 0) {
+                return errorResponse(404, 'Error', 'Belum ada data');
+            }
+            return successResponse(200, 'success', 'Forum by category ' . $category, $forum);
+        }
         $forum = DB::table('forums')
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->join('contexts', 'forums.context_id', '=', 'contexts.id')
