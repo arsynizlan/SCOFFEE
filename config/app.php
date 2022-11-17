@@ -4,6 +4,14 @@ use Illuminate\Support\Facades\Facade;
 
 return [
 
+    // Time Indoensia
+    'timezone' => 'Asia/Jakarta',
+
+    'locale' => 'id',
+
+    'faker_locale' => 'id_ID',
+
+    // End Time
     /*
     |--------------------------------------------------------------------------
     | Application Name

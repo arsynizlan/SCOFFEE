@@ -36,4 +36,5 @@ return array(
     '377b22b161c09ed6e5152de788ca020a' => $vendorDir . '/spatie/laravel-permission/src/helpers.php',
     '6749e3b11c2cec5dec8edd3392a4a825' => $baseDir . '/app/helpers/success.php',
     'c6712a5b92316de655a630875760e684' => $baseDir . '/app/helpers/error.php',
+    '0beeb6e73436fde77370faa27feba978' => $baseDir . '/app/helpers/index.php',
 );

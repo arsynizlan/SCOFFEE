@@ -36,7 +36,13 @@ class AuthController extends Controller
             ])->assignRole('User')->user_detail()->create();
 
 
-            $data = User::where('id', $user->id)->first();
+            $data = User::where('id', $user->id)->first(
+                [
+                    'id',
+                    'name',
+                    'email'
+                ]
+            );
 
             return successResponse(201, 'success', 'Berhasil register', $data);
         } catch (Exception $e) {
