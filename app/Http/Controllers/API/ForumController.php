@@ -117,7 +117,7 @@ class ForumController extends Controller
             if ($request->file('image')) {
                 $extension = $request->file('image')->getClientOriginalExtension();
                 $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                $destination = base_path('public/images/posting/');
+                $destination = '/home/scoffema/public_html/images/posting/';
                 $request->file('image')->move($destination, $image);
             }
             // dd('masuk');
@@ -202,7 +202,7 @@ class ForumController extends Controller
 
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = base_path('public/images/posting/');
+                    $destination = '/home/scoffema/public_html/images/posting/';
                     $request->file('image')->move($destination, $image);
 
                     Category::where('id', $id)->update([
@@ -213,14 +213,14 @@ class ForumController extends Controller
                         'image' => $image,
                     ]);
                 } elseif ($oldImage) {
-                    $pleaseRemove = base_path('public/images/posting/') . $oldImage;
+                    $pleaseRemove = '/home/scoffema/public_html/images/posting/' . $oldImage;
                     if (file_exists($pleaseRemove)) {
                         unlink($pleaseRemove);
                     }
 
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = base_path('public/images/posting/');
+                    $destination = '/home/scoffema/public_html/images/posting/';
                     $request->file('image')->move($destination, $image);
                 }
             }

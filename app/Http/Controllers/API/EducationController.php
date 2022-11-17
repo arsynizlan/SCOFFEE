@@ -33,7 +33,7 @@ class EducationController extends Controller
                 'educations.updated_at'
             )
             ->latest()->paginate(5);
-        return successResponse(200, 'success', 'List Edukasi', $educations);
+        return successResponse(200, 'success', 'List education', $educations);
     }
 
     /**
@@ -69,7 +69,7 @@ class EducationController extends Controller
         try {
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = base_path('public/images/education/');
+            $destination = '/home/scoffema/public_html/images/education/';
             $request->file('image')->move($destination, $image);
 
             $education = Education::create([
@@ -83,7 +83,7 @@ class EducationController extends Controller
         } catch (Exception $e) {
             return errorResponse(422, 'Error', $e);
         }
-        return successResponse(201, 'success', 'Edukasi Berhasil Dibuat', $education);
+        return successResponse(201, 'success', 'education Berhasil Dibuat', $education);
     }
 
     /**
@@ -112,7 +112,7 @@ class EducationController extends Controller
             if (!$educations) {
                 return errorResponse(404, 'error', 'Not Found');
             }
-            return successResponse(200, 'success', 'Detail Edukasi', $educations);
+            return successResponse(200, 'success', 'Detail education', $educations);
         }
         $educations = Education::where('educations.slug', $id)
             ->join('users', 'educations.user_id', '=', 'users.id')
@@ -130,7 +130,7 @@ class EducationController extends Controller
         if (!$educations) {
             return errorResponse(404, 'error', 'Not Found');
         }
-        return successResponse(200, 'success', 'Detail Edukasi', $educations);
+        return successResponse(200, 'success', 'Detail education', $educations);
     }
 
     /**
@@ -170,7 +170,7 @@ class EducationController extends Controller
         if ($request->hasFile('image')) {
             $oldImage = $education->image;
             if ($oldImage) {
-                $pleaseRemove = base_path('public/images/education/') .  $oldImage;
+                $pleaseRemove = '/home/scoffema/public_html/images/education/' .  $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
@@ -179,7 +179,7 @@ class EducationController extends Controller
 
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = base_path('public/images/education/');
+            $destination = '/home/scoffema/public_html/images/education/';
             $request->file('image')->move($destination, $image);
 
             $education->update([
@@ -199,7 +199,7 @@ class EducationController extends Controller
                 'user_id' => Auth::user()->id,
             ]);
         }
-        return successResponse('200', 'success', 'Edukasi Berhasil disunting', $education);
+        return successResponse('200', 'success', 'education Berhasil disunting', $education);
     }
 
     /**
@@ -216,7 +216,7 @@ class EducationController extends Controller
         }
         $oldImage = $event->image;
         if ($oldImage) {
-            $pleaseRemove = base_path('public/images/education/') . $oldImage;
+            $pleaseRemove = '/home/scoffema/public_html/images/education/' . $oldImage;
 
             if (file_exists($pleaseRemove)) {
                 unlink($pleaseRemove);
@@ -225,6 +225,6 @@ class EducationController extends Controller
 
         Education::destroy($id);
 
-        return successResponse(200, 'success', 'Edukasi Berhasil Dihapus', null);
+        return successResponse(200, 'success', 'education Berhasil Dihapus', null);
     }
 }

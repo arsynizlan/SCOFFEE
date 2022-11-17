@@ -46,7 +46,7 @@ class CategoryController extends Controller
         try {
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = base_path('public/images/category/');
+            $destination = '/home/scoffema/public_html/images/category/';
             $request->file('image')->move($destination, $image);
 
             $category = Category::create([
@@ -105,7 +105,7 @@ class CategoryController extends Controller
 
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = base_path('public/images/category/');
+                    $destination = '/home/scoffema/public_html/images/category/';
                     $request->file('image')->move($destination, $image);
 
                     Category::where('id', $id)->update([
@@ -113,14 +113,14 @@ class CategoryController extends Controller
                         'image' => $image,
                     ]);
                 } elseif ($oldImage) {
-                    $pleaseRemove = base_path('public/images/category/') . $oldImage;
+                    $pleaseRemove = '/home/scoffema/public_html/images/category/' . $oldImage;
                     if (file_exists($pleaseRemove)) {
                         unlink($pleaseRemove);
                     }
 
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = base_path('public/images/category/');
+                    $destination = '/home/scoffema/public_html/images/category/';
                     $request->file('image')->move($destination, $image);
                 }
             }

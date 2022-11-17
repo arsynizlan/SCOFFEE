@@ -139,7 +139,7 @@ class UserController extends Controller
 
                         $extension = $request->file('image')->getClientOriginalExtension();
                         $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                        $destination = base_path('public/images/profile/');
+                        $destination = '/home/scoffema/public_html/images/profile/';
                         $request->file('image')->move($destination, $image);
 
                         UserDetail::where('id', $id)->update([
@@ -150,14 +150,14 @@ class UserController extends Controller
                             'image' => $image ? $image : $userDetail->image,
                         ]);
                     } elseif ($oldImage) {
-                        $pleaseRemove = base_path('public/images/profile/') . $oldImage;
+                        $pleaseRemove = '/home/scoffema/public_html/images/profile/' . $oldImage;
                         if (file_exists($pleaseRemove)) {
                             unlink($pleaseRemove);
                         }
 
                         $extension = $request->file('image')->getClientOriginalExtension();
                         $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                        $destination = base_path('public/images/profile/');
+                        $destination = '/home/scoffema/public_html/images/profile/';
                         $request->file('image')->move($destination, $image);
 
                         UserDetail::where('id', $id)->update([
