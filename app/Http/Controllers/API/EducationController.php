@@ -114,6 +114,23 @@ class EducationController extends Controller
             }
             return successResponse(200, 'success', 'Detail Edukasi', $educations);
         }
+        $educations = Education::where('educations.slug', $id)
+            ->join('users', 'educations.user_id', '=', 'users.id')
+            ->select(
+                'educations.id',
+                'users.name as author',
+                'educations.image',
+                'educations.title',
+                'educations.slug',
+                'educations.body',
+                'educations.created_at',
+                'educations.updated_at'
+            )->first();
+
+        if (!$educations) {
+            return errorResponse(404, 'error', 'Not Found');
+        }
+        return successResponse(200, 'success', 'Detail Edukasi', $educations);
     }
 
     /**
@@ -136,7 +153,53 @@ class EducationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $education = Education::find($id);
+        if (!$education) {
+            return errorResponse(404, 'error', 'Not Found');
+        }
+        $rules = [
+            'title' => 'required|max:255',
+            'body' => 'required',
+            'category' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return errorResponse(422, 'error', $validator->errors());
+        }
+
+        if ($request->hasFile('image')) {
+            $oldImage = $education->image;
+            if ($oldImage) {
+                $pleaseRemove = base_path('public/images/education/') .  $oldImage;
+
+                if (file_exists($pleaseRemove)) {
+                    unlink($pleaseRemove);
+                }
+            }
+
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
+            $destination = base_path('public/images/education/');
+            $request->file('image')->move($destination, $image);
+
+            $education->update([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+                'category' => $request->category,
+                'body' => $request->body,
+                'image' => $image,
+                'user_id' => Auth::user()->id,
+            ]);
+        } else {
+            $education->update([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+                'category' => $request->category,
+                'body' => $request->body,
+                'user_id' => Auth::user()->id,
+            ]);
+        }
+        return successResponse('200', 'success', 'Edukasi Berhasil disunting', $education);
     }
 
     /**
@@ -147,6 +210,21 @@ class EducationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $event = Education::find($id);
+        if (!$event) {
+            return errorResponse(404, 'error', 'Not Found');
+        }
+        $oldImage = $event->image;
+        if ($oldImage) {
+            $pleaseRemove = base_path('public/images/education/') . $oldImage;
+
+            if (file_exists($pleaseRemove)) {
+                unlink($pleaseRemove);
+            }
+        }
+
+        Education::destroy($id);
+
+        return successResponse(200, 'success', 'Edukasi Berhasil Dihapus', null);
     }
 }

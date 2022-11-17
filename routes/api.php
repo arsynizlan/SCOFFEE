@@ -27,7 +27,7 @@ Route::group([], function () {
         Route::get('/user/{id}', [UserController::class, 'show']);
 
         /** Edit User */
-        Route::put('/user/{id}', [UserController::class, 'update']);
+        Route::post('/user/{id}', [UserController::class, 'update']);
 
         require __DIR__ . '/api/forum.php';
         require __DIR__ . '/api/comment.php';
@@ -51,7 +51,7 @@ Route::group([], function () {
         Route::group(['middleware' => ['role:Admin|SuperAdmin']], function () {
             /**  Events */
             Route::post('/events', [EventController::class, 'store']);
-            Route::put('/events/{id}', [EventController::class, 'update']);
+            Route::post('/events/{id}', [EventController::class, 'update']);
             Route::delete('/events/{id}', [EventController::class, 'destroy']);
         });
     });

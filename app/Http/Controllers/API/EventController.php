@@ -210,7 +210,7 @@ class EventController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return errorResponse(400, 'error', $validator->errors());
+            return errorResponse(422, 'error', $validator->errors());
         }
 
         if ($request->hasFile('image')) {
