@@ -18,7 +18,7 @@ class EventsSeeder extends Seeder
      */
     public function run()
     {
-        ModelsEvent::factory()->count(500)->create();
+        ModelsEvent::factory()->count(1000)->create();
 
         // $faker = Factory::create();
 

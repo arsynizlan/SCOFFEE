@@ -20,7 +20,7 @@ Route::group([], function () {
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         /** Logout */
-        Route::get('/logout', [AuthController::class, 'logout']);
+        Route::post('/logout', [AuthController::class, 'logout']);
 
         /** User Detail */
         Route::get('/user/{id}', [UserController::class, 'show']);
