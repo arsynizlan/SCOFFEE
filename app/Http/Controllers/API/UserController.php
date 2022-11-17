@@ -22,8 +22,12 @@ class UserController extends Controller
      */
     public function getAdmin()
     {
-
-        $admin = User::role('Admin')->get();
+        $admin = DB::table('users')
+            ->join('user_details', 'users.id', '=', 'user_details.id')
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->select('name', 'email', 'image', 'description', 'born', 'academic', 'work')
+            ->where('role_id', '=', 2)
+            ->latest('users.id')->paginate(10);
         if ($admin) {
             return successResponse(200, 'success', 'All Admin', $admin);
         }
@@ -34,7 +38,12 @@ class UserController extends Controller
     public function getUser()
     {
 
-        $users = User::role('User')->get();
+        $users = DB::table('users')
+            ->join('user_details', 'users.id', '=', 'user_details.id')
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->select('name', 'email', 'image', 'description', 'born', 'academic', 'work')
+            ->where('role_id', '=', 3)
+            ->latest('users.id')->paginate(10);
         return successResponse(200, 'success', 'All User', $users);
     }
 

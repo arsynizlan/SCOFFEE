@@ -49,7 +49,7 @@ class ForumController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->category) {
+        if ($request->has('category')) {
             $category = $request->category;
             $forum = DB::table('forums')
                 ->join('categories', 'forums.category_id', '=', 'categories.id')
@@ -66,9 +66,11 @@ class ForumController extends Controller
                 )
                 ->where('categories.name', '=', $category)
                 ->latest('id')->paginate(5, ['forums.id'], 'asik');
-            // dd($forum->total());
             if ($forum->total() == 0) {
+                // return errorResponse(204, 'Error', 'Belum ada data');
                 return errorResponse(404, 'Error', 'Belum ada data');
+                // abort(422, 'Invalid email: administrator not found');
+                // return successResponse(200, 'success', 'Forum by category ' . $category, $forum);
             }
             return successResponse(200, 'success', 'Forum by category ' . $category, $forum);
         }

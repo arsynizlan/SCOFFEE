@@ -8,5 +8,5 @@ Route::get('/posting/{id}', [ForumController::class, 'show']);
 Route::post('/posting', [ForumController::class, 'store']);
 Route::post('/posting/{id}', [ForumController::class, 'update']);
 Route::delete('/posting/{id}', [ForumController::class, 'destroy']);
-Route::get('/category/{category}/relationships/posting', [ForumController::class, 'groupCategory']);
+// Route::get('/category/{category}/relationships/posting', [ForumController::class, 'groupCategory']);
 // Route::get('/postings', [ForumController::class, 'groupCategory']);

@@ -26,13 +26,15 @@ class EventFactory extends Factory
             ->where('roles.name', '=', 'Admin')
             ->get()->random()->id;
         $title = fake()->sentence(fake()->numberBetween(4, 5));
+        $body = fake()->paragraph(fake()->numberBetween(5, 20));
+
         return [
             'user_id' => $model,
             'image' => fake()->imageUrl(120, 50, 'cats'),
             'title' => $title,
             'slug' => Str::slug($title),
             'date' => fake()->date,
-            'body' => fake()->paragraph(fake()->numberBetween(5, 20)),
+            'body' => '<p>' . $body . '</p>',
             'status_publish' =>  fake()->numberBetween(0, 1),
         ];
     }
