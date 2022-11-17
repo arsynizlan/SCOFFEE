@@ -22,15 +22,15 @@ class EventFactory extends Factory
     {
         // $model = User::with('roles')->first();
         $model = DB::table('users')
-            ->join('roles', 'users.id', '=', 'roles.id')
-            ->where('roles.name', '=', 'Admin')
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->where('role_id', '=', 2)
             ->get()->random()->id;
         $title = fake()->sentence(fake()->numberBetween(4, 5));
         $body = fake()->paragraph(fake()->numberBetween(5, 20));
 
         return [
             'user_id' => $model,
-            'image' => fake()->imageUrl(120, 50, 'cats'),
+            'image' => '(' . fake()->numberBetween(1, 13) . ')' . '.png',
             'title' => $title,
             'slug' => Str::slug($title),
             'date' => fake()->date,

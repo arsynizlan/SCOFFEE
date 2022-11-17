@@ -13,7 +13,7 @@ class Event extends Model
         'title', 'slug', 'body', 'image', 'date', 'user_id', 'status_publish'
     ];
 
-    protected $dateFormat = 'U';
+    // protected $dateFormat = 'U';
 
     public function getImagePathEventAttribute()
     {
