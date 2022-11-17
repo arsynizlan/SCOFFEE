@@ -17,6 +17,7 @@ Route::group([], function () {
 
     /** Get All Education */
     Route::get('/education', [EducationController::class, 'index']);
+    Route::get('/education/{id}', [EducationController::class, 'show']);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         /** Logout */
