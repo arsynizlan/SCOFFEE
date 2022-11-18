@@ -19,12 +19,13 @@ class ForumFactory extends Factory
      */
     public function definition()
     {
-        // $context = Context::all()->random()->id;
-        // $category = Category::all()->random()->id;
+        $user = 'posting (' . fake()->numberBetween(1, 11) . ').png';
+        $image = fake()->randomElement([$user, $user, $user, '']);
+
         return [
             'title' => fake()->sentence(fake()->numberBetween(4, 7)),
             'description' => fake()->paragraph(fake()->numberBetween(6, 9)),
-            'image' => fake()->imageUrl(70, 90, 'Gambar Posting')
+            'image' => $image
         ];
     }
 }
