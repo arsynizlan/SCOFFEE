@@ -30,6 +30,7 @@ return array(
     'App\\Http\\Requests\\EventStoreRequest' => $baseDir . '/app/Http/Requests/EventStoreRequest.php',
     'App\\Http\\Resources\\ApiResource' => $baseDir . '/app/Http/Resources/ApiResource.php',
     'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
+    'App\\Models\\Coffee' => $baseDir . '/app/Models/Coffee.php',
     'App\\Models\\Comment' => $baseDir . '/app/Models/Comment.php',
     'App\\Models\\Context' => $baseDir . '/app/Models/Context.php',
     'App\\Models\\Education' => $baseDir . '/app/Models/Education.php',

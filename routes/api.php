@@ -5,6 +5,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\CoffeeController;
 use App\Http\Controllers\API\EducationController;
 
 Route::group([], function () {
@@ -18,6 +19,10 @@ Route::group([], function () {
     /** Get All Education */
     Route::get('/education', [EducationController::class, 'index']);
     Route::get('/education/{id}', [EducationController::class, 'show']);
+
+    /** Get All Coffee */
+    Route::get('/coffee', [CoffeeController::class, 'index']);
+    Route::get('/coffee/{id}', [CoffeeController::class, 'show']);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         /** Logout */
@@ -34,6 +39,7 @@ Route::group([], function () {
 
         Route::group(['middleware' => ['role:Admin']], function () {
             require __DIR__ . '/api/education.php';
+            require __DIR__ . '/api/coffee.php';
         });
 
         /** Super Admin ONLY*/

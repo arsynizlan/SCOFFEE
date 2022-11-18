@@ -589,6 +589,7 @@ class ComposerStaticInit8ea65c8a893300d624aea9973a8d0d5b
         'App\\Http\\Requests\\EventStoreRequest' => __DIR__ . '/../..' . '/app/Http/Requests/EventStoreRequest.php',
         'App\\Http\\Resources\\ApiResource' => __DIR__ . '/../..' . '/app/Http/Resources/ApiResource.php',
         'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
+        'App\\Models\\Coffee' => __DIR__ . '/../..' . '/app/Models/Coffee.php',
         'App\\Models\\Comment' => __DIR__ . '/../..' . '/app/Models/Comment.php',
         'App\\Models\\Context' => __DIR__ . '/../..' . '/app/Models/Context.php',
         'App\\Models\\Education' => __DIR__ . '/../..' . '/app/Models/Education.php',
