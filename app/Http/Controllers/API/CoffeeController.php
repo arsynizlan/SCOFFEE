@@ -228,6 +228,6 @@ class CoffeeController extends Controller
 
         Coffee::destroy($id);
 
-        return successResponse(200, 'success', 'coffee Berhasil Dihapus', null);
+        return successResponse(200, 'success', 'Kopi Berhasil Dihapus', null);
     }
 }
