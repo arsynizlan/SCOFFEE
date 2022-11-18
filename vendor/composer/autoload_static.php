@@ -569,6 +569,7 @@ class ComposerStaticInit8ea65c8a893300d624aea9973a8d0d5b
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\API\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/AuthController.php',
         'App\\Http\\Controllers\\API\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/CategoryController.php',
+        'App\\Http\\Controllers\\API\\CoffeeController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/CoffeeController.php',
         'App\\Http\\Controllers\\API\\CommentController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/CommentController.php',
         'App\\Http\\Controllers\\API\\EducationController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/EducationController.php',
         'App\\Http\\Controllers\\API\\EventController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/EventController.php',
