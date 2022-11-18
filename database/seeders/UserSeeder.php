@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Context;
 use Event;
 use Faker\Factory;
@@ -61,7 +62,7 @@ class UserSeeder extends Seeder
             'work' => $faker->jobTitle()
         ]);
 
-        UserDetail::factory(100)
+        UserDetail::factory(50)
             ->create()
             ->each(
                 function ($user) {
@@ -71,6 +72,12 @@ class UserSeeder extends Seeder
                             'category_id' => Category::all()->random()->id,
                             'context_id' => Context::all()->random()->id,
                         ],
+                    )->each(
+                        function ($forum) {
+                            Comment::factory()->create([
+                                'forum_id' => $forum->id
+                            ]);
+                        }
                     );
                 }
             );

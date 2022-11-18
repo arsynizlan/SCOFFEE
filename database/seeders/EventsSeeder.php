@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Coffee;
+use App\Models\Education;
 use App\Models\Event as ModelsEvent;
 use App\Models\User;
 use Faker\Factory;
@@ -18,7 +20,9 @@ class EventsSeeder extends Seeder
      */
     public function run()
     {
-        ModelsEvent::factory()->count(1000)->create();
+        ModelsEvent::factory()->count(100)->create();
+        Education::factory()->count(100)->create();
+        Coffee::factory()->count(8)->create();
 
         // $faker = Factory::create();
 

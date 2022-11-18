@@ -42,6 +42,7 @@ class ForumController extends Controller
             ->join('users', 'comments.user_id', '=', 'users.id')
             ->join('forums', 'comments.forum_id', '=', 'forums.id')
             ->select(
+                'users.id',
                 'users.name as user',
                 'comments.content',
                 'comments.created_at'
