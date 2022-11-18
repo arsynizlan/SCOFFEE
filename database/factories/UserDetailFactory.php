@@ -17,11 +17,12 @@ class UserDetailFactory extends Factory
      */
     public function definition()
     {
-        // $user = User::first();
+        $user = 'profile (' . fake()->numberBetween(1, 11) . ').png';
         return [
             'user_id' => User::factory(),
             'description' => fake()->paragraph(fake()->numberBetween(4, 10)),
             'born' => fake()->date(),
+            'image' => $user,
             'academic' => fake()->randomElement((['Baru Lulus S1', 'Masih Semester 1', 'Maba Mahasiswa Baheula', 'Baru Semester 12'])),
             'work' => fake()->jobTitle(),
         ];
