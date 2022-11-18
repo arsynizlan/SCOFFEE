@@ -28,7 +28,7 @@ class EducationFactory extends Factory
         $category = ['Kopi Asik', 'Sumedang Kopi', 'Pejuang Coffee', 'Benih Coffee'];
         return [
             'user_id' => $model,
-            'image' => 'education (' . fake()->numberBetween(1, 10) . ')' . '.png',
+            'image' => 'education (' . fake()->numberBetween(1, 11) . ').png',
             'title' => $title,
             'slug' => Str::slug($title),
             'body' => '<p>' . $body . '</p>',

@@ -18,6 +18,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
      *
@@ -26,12 +27,13 @@ class UserSeeder extends Seeder
     public function run()
     {
         $faker = Factory::create('id_ID');
+        $user = 'profile (' . $faker->numberBetween(1, 11) . ').png';
         User::create([
             'name' => 'Arsy Nizlan Ramadhan',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
         ])->assignRole('SuperAdmin')->user_detail()->create([
-            'image' => $faker->imageUrl(50, 50, 'profile'),
+            'image' => $user,
             'description' => $faker->paragraph($faker->numberBetween(2, 5)),
             'born' => $faker->date(),
             'academic' => $faker->randomElement((['Baru Lulus S1', 'Masih Semester 1', 'Maba Mahasiswa Baheula', 'Baru Semester 12'])),
@@ -43,7 +45,7 @@ class UserSeeder extends Seeder
             'email' => 'praktisi@gmail.com',
             'password' => Hash::make('password'),
         ])->assignRole('Admin')->user_detail()->create([
-            'image' => $faker->imageUrl(50, 50, 'profile'),
+            'image' => $user,
             'description' => $faker->paragraph($faker->numberBetween(2, 5)),
             'born' => $faker->date(),
             'academic' => $faker->randomElement((['Baru Lulus S1', 'Masih Semester 1', 'Maba Mahasiswa Baheula', 'Baru Semester 12'])),
@@ -55,7 +57,7 @@ class UserSeeder extends Seeder
             'email' => 'user@gmail.com',
             'password' => Hash::make('password'),
         ])->assignRole('User')->user_detail()->create([
-            'image' => $faker->imageUrl(50, 50, 'profile'),
+            'image' => $user,
             'description' => $faker->paragraph($faker->numberBetween(2, 5)),
             'born' => $faker->date(),
             'academic' => $faker->randomElement((['Baru Lulus S1', 'Masih Semester 1', 'Maba Mahasiswa Baheula', 'Baru Semester 12'])),
