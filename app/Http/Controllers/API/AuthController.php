@@ -33,7 +33,9 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-            ])->assignRole('User')->user_detail()->create();
+            ])->assignRole('User')->user_detail()->create([
+                'image' => 'profile1.jpg',
+            ]);
 
 
             $data = User::where('id', $user->id)->first(

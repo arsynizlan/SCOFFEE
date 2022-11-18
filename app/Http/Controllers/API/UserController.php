@@ -72,7 +72,9 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-            ])->assignRole('Admin')->user_detail()->create();
+            ])->assignRole('Admin')->user_detail()->create([
+                'image' => 'profile2.jpg',
+            ]);
 
             $data = User::where('id', $user->id)->first();
 
