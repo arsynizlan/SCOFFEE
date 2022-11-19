@@ -72,22 +72,22 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        dd($comment->id);
+        // dd('masuk');
         $forum = $request->forum;
         $comment = $request->comment;
         // $id = auth()->user()->id;
-        $id = DB::table('forums')
+        DB::table('forums')
             ->join('comments', 'forums.id', '=', 'comments.forum_id')
             ->join('users', 'comments.user_id', '=', 'users.id')
-            ->select(
-                'forums.id as forum_id',
-                'comments.id as comment_id',
-                'users.id as user_id',
-                'comments.content'
-            )
             ->where('forums.id', $forum)
             ->where('comments.id', '=', $comment)
+            ->update(
+                [
+                    'forums.id as forum_id' = 2,
+                ]
+            )
             ->first();
+        // dd($id);
 
         Comment::where('');
     }
