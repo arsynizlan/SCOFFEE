@@ -14,4 +14,9 @@ class Comment extends Model
     {
         return $this->hasMany(Forum::class);
     }
+
+    public function user()
+    {
+        return $this->hasMany(User::class, 'id', 'user_id');
+    }
 }

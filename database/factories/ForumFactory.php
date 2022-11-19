@@ -20,7 +20,7 @@ class ForumFactory extends Factory
     public function definition()
     {
         $user = 'posting (' . fake()->numberBetween(1, 11) . ').png';
-        $image = fake()->randomElement([$user, $user, $user, '']);
+        $image = fake()->randomElement([$user, $user, $user, null]);
 
         return [
             'title' => fake()->sentence(fake()->numberBetween(4, 7)),

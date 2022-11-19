@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-
+use Termwind\Components\Dd;
 
 class ForumController extends Controller
 {
@@ -210,37 +210,38 @@ class ForumController extends Controller
 
         try {
             $postingan = Forum::findOrFail($id);
+            $oldImage = $postingan->image;
+            // dd($request->image);
             if ($request->hasFile('image')) {
-                $oldImage = $postingan->image;
-                if ($oldImage == null) {
-
-                    $extension = $request->file('image')->getClientOriginalExtension();
-                    $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = '/home/scoffema/public_html/images/posting/';
-                    $request->file('image')->move($destination, $image);
-
-                    Category::where('id', $id)->update([
-                        'category_id' => $request->categories_id,
-                        'context_id' => $request->context_id,
-                        'title' => $request->title,
-                        'description' => $request->description,
-                        'image' => $image,
-                    ]);
-                } elseif ($oldImage) {
+                if ($postingan->image) {
                     $pleaseRemove = '/home/scoffema/public_html/images/posting/' . $oldImage;
                     if (file_exists($pleaseRemove)) {
                         unlink($pleaseRemove);
                     }
-
-                    $extension = $request->file('image')->getClientOriginalExtension();
-                    $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = '/home/scoffema/public_html/images/posting/';
-                    $request->file('image')->move($destination, $image);
                 }
+
+                $extension = $request->file('image')->getClientOriginalExtension();
+                $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
+                $destination = '/home/scoffema/public_html/images/posting/';
+                $request->file('image')->move($destination, $image);
+            } else {
+                $pleaseRemove = '/home/scoffema/public_html/images/posting/' . $oldImage;
+                if (file_exists($pleaseRemove)) {
+                    unlink($pleaseRemove);
+                }
+                $image = null;
             }
+            Forum::where('id', '=', $id)->update([
+                'category_id' => $request->category_id,
+                'context_id' => $request->context_id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => $image,
+            ]);
+            $postingan = Forum::findOrFail($id);
             return successResponse(200, 'success', 'Tampil Category ', $postingan);
         } catch (Exception $e) {
-            return errorResponse(404, 'error', 'Data Not Found');
+            return errorResponse(404, 'error', 'Data Not Found' . $e);
         }
     }
 

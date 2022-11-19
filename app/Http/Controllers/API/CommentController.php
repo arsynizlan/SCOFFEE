@@ -48,7 +48,6 @@ class CommentController extends Controller
             return successResponse(200, 'success', 'Comment', $comment);
         } catch (Exception $e) {
             return errorResponse(400, 'error', $e);
-            // dd($asik);
         }
     }
 
@@ -70,26 +69,38 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request)
     {
-        // dd('masuk');
-        $forum = $request->forum;
-        $comment = $request->comment;
-        // $id = auth()->user()->id;
-        DB::table('forums')
-            ->join('comments', 'forums.id', '=', 'comments.forum_id')
-            ->join('users', 'comments.user_id', '=', 'users.id')
-            ->where('forums.id', $forum)
-            ->where('comments.id', '=', $comment)
-            ->update(
-                [
-                    'forums.id as forum_id' = 2,
-                ]
-            )
-            ->first();
-        // dd($id);
+        $rules = [
+            'comment' => 'required|max:300',
+        ];
 
-        Comment::where('');
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return errorResponse(422, 'error', $validator->errors());
+        }
+        try {
+            $forum = $request->forum;
+            $comments = $request->comment;
+            DB::table('comments')
+                ->where('forum_id', '=', $forum)
+                ->where('id', '=', $comments)
+                ->update(
+                    [
+                        'content' => $request->message
+                    ]
+                );
+            $data = Comment::with(['user' => function ($query) {
+                $query->select('id', 'name');
+            }])->where([
+                ['forum_id', '=', $forum],
+                ['id', '=', $comments],
+            ])->first('user:id');
+
+            return successResponse(200, 'success', 'Update Comment', $data);
+        } catch (Exception $e) {
+            return errorResponse(400, 'error', $e);
+        }
     }
 
     /**
