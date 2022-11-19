@@ -18,7 +18,7 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
     }
@@ -64,17 +64,6 @@ class CommentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Comment $comment)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -83,7 +72,24 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        //
+        dd($comment->id);
+        $forum = $request->forum;
+        $comment = $request->comment;
+        // $id = auth()->user()->id;
+        $id = DB::table('forums')
+            ->join('comments', 'forums.id', '=', 'comments.forum_id')
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->select(
+                'forums.id as forum_id',
+                'comments.id as comment_id',
+                'users.id as user_id',
+                'comments.content'
+            )
+            ->where('forums.id', $forum)
+            ->where('comments.id', '=', $comment)
+            ->first();
+
+        Comment::where('');
     }
 
     /**
