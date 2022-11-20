@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WEB\AuthController;
+use App\Http\Controllers\WEB\UserController;
+use App\Http\Controllers\WEB\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +19,26 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('login');
+
+
+
+Route::group([], function () {
+
+    Route::get('/login', [AuthController::class, 'index']);
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::group(['middleware' => ['auth']], function () {
+        route::get('/dashboard', function () {
+            return view('dashboard');
+        });
+
+        Route::get('/events', [EventController::class, 'index']);
+        Route::get('/events/{id}', [EventController::class, 'show']);
+        Route::post('/events/{id}', [EventController::class, 'update']);
+        Route::delete('/events/{id}', [EventController::class, 'destroy']);
+
+        Route::get('/admin', [UserController::class, 'index']);
+
+        Route::get('/logout', [AuthController::class, 'logout']);
+    });
+});
