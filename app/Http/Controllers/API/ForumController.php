@@ -32,7 +32,6 @@ class ForumController extends Controller
                 'users.name as user',
                 'categories.name as category',
                 'contexts.name as context',
-                'forums.title',
                 'forums.description',
                 'forums.image as image',
             )
@@ -74,7 +73,6 @@ class ForumController extends Controller
                     'users.name as user',
                     'categories.name as category',
                     'contexts.name as context',
-                    'forums.title',
                     'forums.description',
                     'forums.image as image',
                 )
@@ -116,7 +114,6 @@ class ForumController extends Controller
         $rules = [
             'category_id' => 'required',
             'context_id' => 'required',
-            'title' => 'required',
             'description' => 'required',
             'image' => 'image',
         ];
@@ -139,7 +136,6 @@ class ForumController extends Controller
                 'user_id' => auth()->user()->id,
                 'category_id' => $request->category_id,
                 'context_id' => $request->context_id,
-                'title' => $request->title,
                 'description' => $request->description,
                 'image' => $image,
             ]);
@@ -166,7 +162,6 @@ class ForumController extends Controller
                 'forums.id',
                 'categories.name as category',
                 'contexts.name as context',
-                'forums.title',
                 'forums.description',
                 'forums.image as image',
                 'users.name as user'
@@ -198,7 +193,6 @@ class ForumController extends Controller
         $rules = [
             'category_id' => 'required',
             'context_id' => 'required',
-            'title' => 'required',
             'description' => 'required',
             'image' => 'image',
         ];
@@ -234,7 +228,6 @@ class ForumController extends Controller
             Forum::where('id', '=', $id)->update([
                 'category_id' => $request->category_id,
                 'context_id' => $request->context_id,
-                'title' => $request->title,
                 'description' => $request->description,
                 'image' => $image,
             ]);

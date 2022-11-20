@@ -23,7 +23,6 @@ class ForumFactory extends Factory
         $image = fake()->randomElement([$user, $user, $user, null]);
 
         return [
-            'title' => fake()->sentence(fake()->numberBetween(4, 7)),
             'description' => fake()->paragraph(fake()->numberBetween(6, 9)),
             'image' => $image
         ];
