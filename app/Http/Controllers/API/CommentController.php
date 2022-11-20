@@ -95,7 +95,7 @@ class CommentController extends Controller
             }])->where([
                 ['forum_id', '=', $forum],
                 ['id', '=', $comments],
-            ])->first('user:id');
+            ])->first();
 
             return successResponse(200, 'success', 'Update Comment', $data);
         } catch (Exception $e) {
