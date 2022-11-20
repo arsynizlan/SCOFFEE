@@ -54,15 +54,15 @@
                     <li class="sidebar-item  has-sub">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-stack"></i>
-                            <span>Event</span>
+                            <span>Data Master</span>
                         </a>
                         <ul class="submenu">
 
                             <li class="submenu-item">
-                                <a href="{{ url('/events') }}">Semua Event</a>
+                                <a href="{{ url('supplier') }}">List Admin</a>
                             </li>
                             <li class="submenu-item">
-                                <a href="{{ url('supplier') }}">Buat Event</a>
+                                <a href="{{ url('/events') }}">List Event</a>
                             </li>
                         </ul>
                     </li>

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\WEB;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Exception;
+use Illuminate\Support\Facades\Response;
 
 class EventController extends Controller
 {
@@ -51,30 +54,12 @@ class EventController extends Controller
     public function show($id)
     {
         if (is_numeric($id)) {
-
-            // $event = Event::where('events.id', $id)
-            //     ->join('users', 'events.user_id', '=', 'users.id')
-            //     ->select(
-            //         'events.id',
-            //         'users.name as author',
-            //         'events.image',
-            //         'events.title',
-            //         'events.slug',
-            //         'events.body',
-            //         'events.date',
-            //         'events.status_publish',
-            //         'events.created_at',
-            //         'events.updated_at'
-            //     )->first();
-            // if (!$event) {
-            //     return errorResponse(404, 'error', 'Not Found');
-            // }
-            // // $event->image = $event->imagePathEvent;
-            // if ($event->status_publish == 1) {
-            //     return successResponse(200, 'success', 'Detail Event', $event);
-            // } else {
-            //     return errorResponse(404, 'error', 'Not Found');
-            // }
+            $data = DB::table('events')
+                ->join('users', 'events.user_id', '=', 'users.id')
+                ->select(['events.*', 'users.name as author'])
+                ->where('events.id', $id)
+                ->first();
+            return Response::json($data);
         }
 
         $data = Event::orderBy('id', 'desc')
@@ -125,7 +110,25 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            DB::transaction(function () use ($request, $id) {
+                DB::table('events')->where('id', $id)->update([
+                    'status_publish' => $request->status_publish,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            });
+            $json = [
+                'msg' => 'Status publish event berhasil disunting',
+                'status' => true
+            ];
+        } catch (Exception $e) {
+            $json = [
+                'msg'       => 'error',
+                'status'    => false,
+                'e'         => $e
+            ];
+        }
+        return Response::json($json);
     }
 
     /**
@@ -136,6 +139,39 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $event = Event::find($id);
+            if (!$event) {
+                $json = [
+                    'msg' => 'Data Tidak Ditemukan',
+                    'status' => false,
+                ];
+            }
+            $oldImage = $event->image;
+            if ($oldImage) {
+                $pleaseRemove = '/home/scoffema/public_html/images/events/' . $oldImage;
+
+                if (file_exists($pleaseRemove)) {
+                    unlink($pleaseRemove);
+                }
+            }
+
+            DB::transaction(function () use ($id) {
+                DB::table('events')->where('id', $id)->delete();
+            });
+
+            $json = [
+                'msg' => 'Event berhasil dihapus',
+                'status' => true
+            ];
+        } catch (Exception $e) {
+            $json = [
+                'msg' => 'error',
+                'status' => false,
+                'e' => $e,
+            ];
+        };
+
+        return Response::json($json);
     }
 }
