@@ -13,6 +13,38 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    public function index()
+    {
+        return view('login/index');
+    }
+
+    public function loginWeb(Request $request)
+    {
+        $rules = [
+            'email' => 'required|email',
+            'password' => 'required'
+        ];
+
+        $Validator = Validator::make($request->all(), $rules);
+
+        if ($Validator->fails()) {
+            return redirect()->back()->withErrors($Validator)->withInput($request->all);
+        }
+        $data = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
+
+
+        Auth::attempt($data);
+
+        if (Auth::check()) {
+            return redirect()->to('/dashboard');
+        }
+
+        return back()->with('loginError', 'Email atau Password Salah!');
+    }
+
     public function register(Request $request)
     {
         // $request->validated();
