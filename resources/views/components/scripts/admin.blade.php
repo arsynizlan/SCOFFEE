@@ -86,14 +86,14 @@
     //     });
 
     // }
-    // $(function() {
-    //     $('#body-edit').summernote();
+    $(function() {
+        $('#body-edit').summernote();
 
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    //         }
-    //     });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
 
 
     //     // $('#createSubmit').click(function(e) {
@@ -183,49 +183,43 @@
     //             }
     //         })
     //     });
-    //     $('#table').DataTable({
-    //         dom: 'Bfrtip',
-    //         // Configure the drop down options.
-    //         lengthMenu: [
-    //             [10, 25, 50, -1],
-    //             ['10 rows', '25 rows', '50 rows', 'Show all']
-    //         ],
-    //         buttons: [
-    //             'pageLength', 'excel', 'pdf', 'print'
-    //         ],
-    //         filter: true,
-    //         processing: true,
-    //         responsive: true,
-    //         serverSide: true,
-    //         ajax: {
-    //             url: '/events/all'
-    //         },
-    //         "columns": [{
-    //                 data: 'DT_RowIndex',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
-    //             {
-    //                 data: 'title',
+        $('#table').DataTable({
+            dom: 'Bfrtip',
+            // Configure the drop down options.
+            lengthMenu: [
+                [10, 25, 50, -1],
+                ['10 rows', '25 rows', '50 rows', 'Show all']
+            ],
+            buttons: [
+                'pageLength', 'excel', 'pdf', 'print'
+            ],
+            filter: true,
+            processing: true,
+            responsive: true,
+            serverSide: true,
+            ajax: {
+                url: '/user/all'
+            },
+            "columns": [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'name',
 
-    //             },
-    //             {
-    //                 data: 'author',
+                },
+                {
+                    data: 'email',
 
-    //             },
-    //             {
-    //                 data: 'status_publish',
-    //             },
-    //             {
-    //                 data: 'image',
-    //             },
-    //             {
-    //                 data: 'action',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
+                },
+                {
+                    data: 'action',
+                    orderable: false,
+                    searchable: false
+                },
 
-    //         ]
-    //     });
-    // });
+            ]
+        });
+    });
 </script>

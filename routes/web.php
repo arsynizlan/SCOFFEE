@@ -17,17 +17,17 @@ use App\Http\Controllers\WEB\EventController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('login');
+    return redirect('/login');
+});
 
 
 
 Route::group([], function () {
 
-    Route::get('/login', [AuthController::class, 'index']);
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 
-    Route::group(['middleware' => ['auth']], function () {
+    Route::group(['middleware' => ['auth', 'role:SuperAdmin|Admin']], function () {
         route::get('/dashboard', function () {
             return view('dashboard');
         });
@@ -39,6 +39,6 @@ Route::group([], function () {
 
         Route::get('/admin', [UserController::class, 'index']);
 
-        Route::get('/logout', [AuthController::class, 'logout']);
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 });

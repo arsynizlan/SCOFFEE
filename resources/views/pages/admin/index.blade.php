@@ -2,7 +2,7 @@
 
 @section('title')
     <div class="page-heading">
-        <h3>Admin</h3>
+        <h3>User</h3>
     </div>
 @endsection
 
@@ -17,9 +17,9 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th width="5%">No</th>
-                                <th>Nama Event</th>
-                                <th>Nama Pembuat</th>
-                                <th>Status</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                {{-- <th>Status</th> --}}
                                 <th width="20%">Image</th>
                                 <th width="20%">Aksi</th>
                             </tr>
