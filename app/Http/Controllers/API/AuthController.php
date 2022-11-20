@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    public function index()
+    {
+        //
+    }
+
     public function register(Request $request)
     {
         // $request->validated();
@@ -78,6 +83,8 @@ class AuthController extends Controller
 
         return successResponse(200, 'success', 'Berhasil login', $data);
     }
+
+
 
     public function logout(Request $request)
     {
