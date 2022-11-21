@@ -66,47 +66,27 @@
                         </li>
                     </ul>
                 </li>
-                <li
-                class="sidebar-item">
-                <a href="application-chat.html" class='sidebar-link'>
-                    <i class="bi bi-chat-dots-fill"></i>
-                    <span>Category</span>
-                </a>
-            </li>
-{{--
+                <li class="sidebar-item">
+                    <a href="application-chat.html" class='sidebar-link'>
+                        <i class="bi bi-chat-dots-fill"></i>
+                        <span>Category</span>
+                    </a>
+                </li>
+                {{--
                 <li class="sidebar-item">
                     <a href="{{ url('/dashboard') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
-                    </a>
+                <i class="bi bi-grid-fill"></i>
+                <span>Dashboard</span>
+                </a>
                 </li> --}}
                 @endrole
                 @role('Admin')
-                {{-- <li class="sidebar-item {{ Request::url() == url('/product') ? 'active' : '' }}">
-                <a href="{{ url('/product') }}" class='sidebar-link'>
-                    <i class="bi bi-boxes"></i>
-                    <span>Product</span>
-                </a>
-                </li>
-
-                <li class="sidebar-item  has-sub  @if (Request::url() == url('/transaction')) active @endif
-                @if (Request::url() == url('/sale')) active @endif
-                ">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-arrow-left-right"></i>
-                        <span>Transaksi</span>
+                <li class="sidebar-item">
+                    <a href="application-chat.html" class='sidebar-link'>
+                        <i class="bi bi-chat-dots-fill"></i>
+                        <span>Category</span>
                     </a>
-                    <ul class="submenu @if (Request::url() == url('/transaction')) active @endif
-                    @if (Request::url() == url('/sale')) active @endif">
-
-                        <li class="submenu-item {{ Request::url() == url('/transaction') ? 'active' : '' }}">
-                            <a href="{{ url('/transaction') }}">Transaksi Pembelian</a>
-                        </li>
-                        <li class="submenu-item {{ Request::url() == url('/sale') ? 'active' : '' }}">
-                            <a href="{{ url('/sale') }}">Transaksi Penjualan</a>
-                        </li>
-                    </ul>
-                </li> --}}
+                </li>
                 @endrole
 
 
