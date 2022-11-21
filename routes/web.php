@@ -32,14 +32,7 @@ Route::group([], function () {
             return view('dashboard');
         });
 
-        Route::get('/events', [EventController::class, 'index']);
-        Route::get('/events/{id}', [EventController::class, 'show']);
-        Route::post('/events/{id}', [EventController::class, 'update']);
-        Route::delete('/events/{id}', [EventController::class, 'destroy']);
-
-        Route::get('/users', [UserController::class, 'index']);
-        Route::get('/users/{id}', [UserController::class, 'show']);
-        Route::post('/users', [UserController::class, 'store']);
+        require __DIR__ . '/web/superAdmin.php';
 
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
