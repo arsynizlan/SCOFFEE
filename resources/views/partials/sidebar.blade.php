@@ -6,8 +6,8 @@
                     <h5>SCOFFEE</h5>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20"
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                        role="img" class="iconify iconify--system-uicons" width="20" height="20"
                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
                         <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
                             stroke-linejoin="round">
@@ -51,12 +51,12 @@
                 </li>
 
                 @role('SuperAdmin')
-                <li class="sidebar-item  has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
-                        <span>Data Master</span>
-                    </a>
-                    <ul class="submenu">
+                    <li class="sidebar-item  has-sub">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-stack"></i>
+                            <span>Data Master</span>
+                        </a>
+                        <ul class="submenu">
 
                         <li class="submenu-item">
                             <a href="{{ url('/admin') }}">List Admin</a>
@@ -66,13 +66,14 @@
                         </li>
                     </ul>
                 </li>
-                <li class="sidebar-item">
-                    <a href="application-chat.html" class='sidebar-link'>
-                        <i class="bi bi-chat-dots-fill"></i>
-                        <span>Category</span>
-                    </a>
-                </li>
-                {{--
+                <li
+                class="sidebar-item">
+                <a href="application-chat.html" class='sidebar-link'>
+                    <i class="bi bi-chat-dots-fill"></i>
+                    <span>Category</span>
+                </a>
+            </li>
+{{--
                 <li class="sidebar-item">
                     <a href="{{ url('/dashboard') }}" class='sidebar-link'>
                 <i class="bi bi-grid-fill"></i>
@@ -81,24 +82,35 @@
                 </li> --}}
                 @endrole
                 @role('Admin')
-                <li class="sidebar-item">
-                    <a href="application-chat.html" class='sidebar-link'>
-                        <i class="bi bi-chat-dots-fill"></i>
-                        <span>Category</span>
+                {{-- <li class="sidebar-item {{ Request::url() == url('/product') ? 'active' : '' }}">
+                <a href="{{ url('/product') }}" class='sidebar-link'>
+                    <i class="bi bi-boxes"></i>
+                    <span>Product</span>
+                </a>
+                </li>
+
+                <li class="sidebar-item  has-sub  @if (Request::url() == url('/transaction')) active @endif
+                @if (Request::url() == url('/sale')) active @endif
+                ">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-arrow-left-right"></i>
+                        <span>Transaksi</span>
                     </a>
                 </li>
                 @endrole
 
 
                 <li class="sidebar-item">
-                    <form action="{{ route('logout') }}" method="post">
+                    <form action="{{ route('logout') }}" method="POST" class="m-3">
                         @csrf
-                        <button class="sidebar-link btn icon ">
+                        <button type="submit" class="btn btn-outline-danger">
                             <i class="bi bi-box-arrow-left"></i>
                             <span>Logout</span>
                         </button>
                     </form>
                 </li>
+
+
 
             </ul>
         </div>

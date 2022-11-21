@@ -2,14 +2,18 @@
 
 @section('title')
     <div class="page-heading">
-        <h3>User</h3>
+        <h3>Admin</h3>
     </div>
 @endsection
 
 @section('content')
     <section class="section">
         <div class="card mb-3">
-
+            <div class="card-header">
+                <button type="button" class="btn btn-outline-primary block" onclick="create()">
+                    Tambah Admin
+                </button>
+            </div>
             <div class="card-body">
                 <!-- table head dark -->
                 <div class="table-responsive">
@@ -31,7 +35,6 @@
             </div>
         </div>
     </section>
-    {{-- @include('components.modals.event.editstatus') --}}
 @endsection
 
 
