@@ -38,6 +38,8 @@ Route::group([], function () {
         Route::delete('/events/{id}', [EventController::class, 'destroy']);
 
         Route::get('/admin', [UserController::class, 'index']);
+        Route::get('/admin/{id}', [UserController::class, 'show']);
+
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });

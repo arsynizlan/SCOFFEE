@@ -110,11 +110,16 @@
 
 
                 <li class="sidebar-item">
-                    <a href="{{ url('/logout') }}" class="sidebar-link btn icon">
-                        <i class="bi bi-box-arrow-left"></i>
-                        <span>Logout</span>
-                    </a>
+                    <form action="{{ route('logout') }}" method="POST" class="m-3">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class="bi bi-box-arrow-left"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
                 </li>
+
+
 
             </ul>
         </div>
