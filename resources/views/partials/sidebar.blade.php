@@ -74,10 +74,13 @@
                     </li>
                 @endrole
 
+                @role('Admin')
+                @include('partials.admin')
+                @endrole
+
 
 
                 <li class="sidebar-item">
-
                     <form action="{{ route('logout') }}" method="POST" class="m-3">
                         @csrf
                         <button type="submit" class="btn btn-outline-danger ml-3">
