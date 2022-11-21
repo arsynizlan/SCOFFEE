@@ -1,14 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\WEB\UserController;
-use App\Http\Controllers\WEB\EventController;
+use App\Http\Controllers\WEB\Admin\EducationController;
+use App\Http\Controllers\WEB\Admin\EventController;
 
-Route::get('/events', [EventController::class, 'index']);
-Route::get('/events/{id}', [EventController::class, 'show']);
-Route::post('/events/{id}', [EventController::class, 'update']);
-Route::delete('/events/{id}', [EventController::class, 'destroy']);
+Route::prefix('p')->group(function () {
+    Route::get('/events', [EventController::class, 'index']);
+    Route::get('/events/{id}', [EventController::class, 'show']);
+    Route::post('/events/{id}', [EventController::class, 'update']);
+    Route::delete('/events/{id}', [EventController::class, 'destroy']);
 
-Route::get('/users', [UserController::class, 'index']);
-Route::get('/users/{id}', [UserController::class, 'show']);
-Route::post('/users', [UserController::class, 'store']);
+    Route::get('/education', [EducationController::class, 'index']);
+    Route::post('/education', [EducationController::class, 'store']);
+    Route::get('/education/{id}', [EducationController::class, 'show']);
+    Route::post('/education/{id}', [EducationController::class, 'update']);
+    Route::delete('/education/{id}', [EducationController::class, 'destroy']);
+});

@@ -33,6 +33,7 @@ Route::group([], function () {
         });
 
         require __DIR__ . '/web/superAdmin.php';
+        require __DIR__ . '/web/admin.php';
 
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
