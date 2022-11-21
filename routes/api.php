@@ -37,6 +37,11 @@ Route::group([], function () {
         require __DIR__ . '/api/forum.php';
         require __DIR__ . '/api/comment.php';
 
+
+        Route::get('/category', [CategoryController::class, 'index']);
+        Route::get('/category/{id}', [CategoryController::class, 'show']);
+        Route::get('/categories', [CategoryController::class, 'counts']);
+
         Route::group(['middleware' => ['role:Admin']], function () {
             require __DIR__ . '/api/education.php';
             require __DIR__ . '/api/coffee.php';
