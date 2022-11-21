@@ -1,7 +1,8 @@
 <script>
-    let user_id;
+    let category_id;
 
     const create = () => {
+        $(".dropify-clear").click();
         $('#createForm').trigger('reset');
         $('#createModal').modal('show');
     }
@@ -16,14 +17,14 @@
                 Swal.showLoading()
             }
         });
-        user_id = id;
+        category_id = id;
 
         $.ajax({
             type: "get",
-            url: `/users/${user_id}`,
+            url: `/categories/${category_id}`,
             dataType: "json",
             success: function(response) {
-                $('#role-edit').val(response.roles);
+                $('#name-edit').val(response.name);
 
                 Swal.close();
                 $('#editModal').modal('show');
@@ -33,7 +34,7 @@
 
     const deleteData = (id) => {
         Swal.fire({
-            title: 'Apa anda yakin untuk menghapus User ini?',
+            title: 'Apa anda yakin untuk menghapus kategori ini?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya',
@@ -53,7 +54,7 @@
 
                 $.ajax({
                     type: "delete",
-                    url: `/users/${id}`,
+                    url: `/categories/${id}`,
                     dataType: "json",
                     success: function(response) {
                         Swal.close();
@@ -79,7 +80,6 @@
 
 
     $(function() {
-        $('#body-edit').summernote();
 
         $.ajaxSetup({
             headers: {
@@ -91,7 +91,7 @@
         $('#createSubmit').click(function(e) {
             e.preventDefault();
 
-            var formData = $('#createForm').serialize();
+            var formData = new FormData($('#createForm')[0]);
 
             Swal.fire({
                 title: 'Mohon tunggu',
@@ -104,11 +104,12 @@
 
             $.ajax({
                 type: "post",
-                url: "/users",
+                url: "/categories",
                 data: formData,
                 dataType: "json",
                 cache: false,
                 processData: false,
+                contentType: false,
                 success: function(data) {
                     Swal.close();
 
@@ -147,7 +148,7 @@
 
             $.ajax({
                 type: "post",
-                url: `/users/${user_id}`,
+                url: `/categories/${category_id}`,
                 data: formData,
                 dataType: "json",
                 cache: false,
@@ -190,7 +191,7 @@
             responsive: true,
             serverSide: true,
             ajax: {
-                url: '/users/listadmin'
+                url: '/categories/listcategories',
             },
             "columns": [{
                     data: 'DT_RowIndex',
@@ -202,11 +203,7 @@
 
                 },
                 {
-                    data: 'email',
-
-                },
-                {
-                    data: 'roles',
+                    data: 'image',
 
                 },
                 {

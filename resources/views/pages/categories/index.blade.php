@@ -2,14 +2,18 @@
 
 @section('title')
     <div class="page-heading">
-        <h3>All Users</h3>
+        <h3>Kategori</h3>
     </div>
 @endsection
 
 @section('content')
     <section class="section">
         <div class="card mb-3">
-
+            <div class="card-header">
+                <button type="button" class="btn btn-outline-primary block" onclick="create()">
+                    Tambah Kategori
+                </button>
+            </div>
             <div class="card-body">
                 <!-- table head dark -->
                 <div class="table-responsive">
@@ -18,8 +22,7 @@
                             <tr>
                                 <th width="5%">No</th>
                                 <th>Nama</th>
-                                <th>Email</th>
-                                <th>Role</th>
+                                <th width="20%">Image</th>
                                 <th width="20%">Aksi</th>
                             </tr>
                         </thead>
@@ -30,11 +33,12 @@
             </div>
         </div>
     </section>
-    @include('components.modals.users.create')
-    @include('components.modals.users.edit')
+    @include('components.modals.categories.create')
+    @include('components.modals.categories.edit')
 @endsection
 
 
 @push('script')
     @include($script)
+    @include('components.scripts.dropify')
 @endpush

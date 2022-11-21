@@ -64,18 +64,15 @@
                             <li class="submenu-item">
                                 <a href="{{ url('/events') }}">List Event</a>
                             </li>
+                            <li class="submenu-item">
+                                <a href="{{ url('/categories') }}">Kategori</a>
+                            </li>
                         </ul>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="application-chat.html" class='sidebar-link'>
-                            <i class="bi bi-chat-dots-fill"></i>
-                            <span>Category</span>
-                        </a>
                     </li>
                 @endrole
 
                 @role('Admin')
-                @include('partials.admin')
+                    @include('partials.admin')
                 @endrole
 
 
@@ -83,7 +80,7 @@
                 <li class="sidebar-item">
                     <form action="{{ route('logout') }}" method="POST" class="m-3">
                         @csrf
-                        <button type="submit" class="btn btn-outline-danger ml-3">
+                        <button type="submit" class="btn btn-outline-danger btn-block">
                             <i class="bi bi-box-arrow-left"></i>
                             <span>Logout</span>
                         </button>

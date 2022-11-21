@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\WEB;
 
 use Exception;
-use App\Models\User;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 
-class UserController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,9 +19,9 @@ class UserController extends Controller
     public function index()
     {
         $data = [
-            'script' => 'components.scripts.users'
+            'script' => 'components.scripts.categories'
         ];
-        return view('pages.users.index', $data);
+        return view('pages.categories.index', $data);
     }
 
     /**
@@ -43,47 +42,32 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         if ($request->name == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan nama',
+                'msg'       => 'Mohon berikan nama kategori',
                 'status'    => false
             ];
-        } elseif ($request->email == NULL) {
+        } elseif ($request->image == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan email',
-                'status'    => false
-            ];
-        } elseif (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
-            $json = [
-                'msg'       => 'Email tidak valid!',
-                'status'    => false
-            ];
-        } elseif ($request->password == NULL) {
-            $json = [
-                'msg'       => 'Mohon berikan password',
-                'status'    => false
-            ];
-        } elseif (strlen($request->password) < 8) {
-            $json = [
-                'msg'       => 'Password minimal character 8!',
-                'status'    => false
-            ];
-        } elseif ($request->password != $request->password_confirmation) {
-            $json = [
-                'msg'       => 'Password tidak cocok!',
+                'msg'       => 'Mohon berikan gambar',
                 'status'    => false
             ];
         } else {
             try {
-                User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                ])->assignRole('Admin')->user_detail()->create();
+                DB::transaction(function () use ($request) {
+                    $extension = $request->file('image')->getClientOriginalExtension();
+                    $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
+                    $destination = '/home/scoffema/public_html/images/category/';
+                    $request->file('image')->move($destination, $image);
+
+                    Category::create([
+                        'name' => $request->name,
+                        'image' => $image,
+                    ]);
+                });
 
                 $json = [
-                    'msg' => 'Admin ditambahkan',
+                    'msg' => 'Kategori berhasil ditambahkan',
                     'status' => true
                 ];
             } catch (Exception $e) {
@@ -106,40 +90,26 @@ class UserController extends Controller
     public function show($id)
     {
         if (is_numeric($id)) {
-            $data = DB::table('users')
-                ->where('users.id', $id)
-                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->select('users.id', 'users.name', 'email', 'roles.name as roles')
+            $data = Category::where('id', $id)
                 ->first();
             return Response::json($data);
         }
-        $data = DB::table('users')
-            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->select('users.id', 'users.name', 'email', 'roles.name as roles')
-            ->latest('users.id')->get();
-
-
-
-
-        // User::with('roles')->orderBy('id', 'desc')
-        //     ->select('id', 'name', 'email', 'roles.name as roles')
-        //     ->get();
-
-
+        $data = Category::orderBy('id', 'desc')
+            ->get();
         return datatables()
             ->of($data)
             ->addIndexColumn()
+            ->addColumn('image', function ($row) {
+                return '<image class="img-thumbnail" src="https://scoffe.masuk.web.id/images/category/' . $row->image . '">';
+            })
             ->addColumn('action', function ($row) {
                 $data = [
                     'id' => $row->id
                 ];
 
-                return view('components.buttons.users', $data);
+                return view('components.buttons.categories', $data);
             })
-
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'image'])
             ->make(true);
     }
 
@@ -163,29 +133,42 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->role == NULL) {
+        if ($request->name == NULL) {
             $json = [
-                'msg'       => 'Mohon pilih Role',
+                'msg'       => 'Mohon berikan nama kategori',
                 'status'    => false
             ];
         } else {
             try {
-
                 DB::transaction(function () use ($request, $id) {
-                    if ($request->role == "SuperAdmin") {
-                        $role = 1;
-                    } elseif ($request->role == "Admin") {
-                        $role = 2;
-                    } else {
-                        $role = 3;
-                    }
-                    DB::table('model_has_roles')->where('model_id', $id)->update([
-                        'role_id' => $role,
+                    DB::table('categories')->where('id', $id)->update([
+                        'name' => $request->name,
                     ]);
+
+                    if ($request->has('image')) {
+                        $oldImage = $request->image;
+
+                        if ($oldImage) {
+                            $pleaseRemove = '/home/scoffema/public_html/images/category/' . $oldImage;
+
+                            if (file_exists($pleaseRemove)) {
+                                unlink($pleaseRemove);
+                            }
+                        }
+
+                        $extension = $request->file('image')->getClientOriginalExtension();
+                        $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
+                        $destination = base_path('public/images/');
+                        $request->file('image')->move($destination, $image);
+
+                        Category::where('id', $id)->update([
+                            'image' => $image,
+                        ]);
+                    };
                 });
 
                 $json = [
-                    'msg' => 'Role berhasil disunting',
+                    'msg' => 'Kategori berhasil disunting',
                     'status' => true
                 ];
             } catch (Exception $e) {
@@ -208,21 +191,38 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
-            User::withTrashed()->find($id);
+            $data = Category::find($id);
+            if (!$data) {
+                $json = [
+                    'msg' => 'Data Tidak Ditemukan',
+                    'status' => false,
+                ];
+            }
+            $oldImage = $data->image;
+            if ($oldImage) {
+                $pleaseRemove = '/home/scoffema/public_html/images/category/' . $oldImage;
+
+                if (file_exists($pleaseRemove)) {
+                    unlink($pleaseRemove);
+                }
+            }
+
             DB::transaction(function () use ($id) {
-                User::where('id', $id)->forceDelete();
+                DB::table('categories')->where('id', $id)->delete();
             });
+
             $json = [
-                'msg' => 'User berhasil dihapus',
+                'msg' => 'Category berhasil dihapus',
                 'status' => true
             ];
         } catch (Exception $e) {
             $json = [
-                'msg'       => 'Error',
-                'status'    => false,
-                'e'         => $e
+                'msg' => 'error',
+                'status' => false,
+                'e' => $e,
             ];
-        }
+        };
+
         return Response::json($json);
     }
 }
