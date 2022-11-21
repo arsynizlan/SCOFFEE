@@ -2,7 +2,7 @@
 
 @section('title')
     <div class="page-heading">
-        <h3>Admin</h3>
+        <h3>All Users</h3>
     </div>
 @endsection
 
@@ -23,8 +23,7 @@
                                 <th width="5%">No</th>
                                 <th>Nama</th>
                                 <th>Email</th>
-                                {{-- <th>Status</th> --}}
-                                <th width="20%">Image</th>
+                                <th>Role</th>
                                 <th width="20%">Aksi</th>
                             </tr>
                         </thead>
@@ -35,6 +34,8 @@
             </div>
         </div>
     </section>
+    @include('components.modals.users.create')
+    @include('components.modals.users.edit')
 @endsection
 
 

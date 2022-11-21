@@ -1,12 +1,6 @@
 <script>
     let event_id;
 
-    // const create = () => {
-    //     $('#createForm').trigger('reset');
-    //     $('#createModal').modal('show');
-    // }
-
-
     const edit = (id) => {
         Swal.fire({
             title: 'Mohon tunggu',
@@ -94,51 +88,6 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         });
-
-
-        // $('#createSubmit').click(function(e) {
-        //     e.preventDefault();
-
-        //     var formData = $('#createForm').serialize();
-
-        //     Swal.fire({
-        //         title: 'Mohon tunggu',
-        //         showConfirmButton: false,
-        //         allowOutsideClick: false,
-        //         willOpen: () => {
-        //             Swal.showLoading()
-        //         }
-        //     });
-
-        //     $.ajax({
-        //         type: "post",
-        //         url: "/category",
-        //         data: formData,
-        //         dataType: "json",
-        //         cache: false,
-        //         processData: false,
-        //         success: function(data) {
-        //             Swal.close();
-
-        //             if (data.status) {
-        //                 Swal.fire(
-        //                     'Success!',
-        //                     data.msg,
-        //                     'success'
-        //                 )
-
-        //                 $('#createModal').modal('hide');
-        //                 $('#category').DataTable().ajax.reload();
-        //             } else {
-        //                 Swal.fire(
-        //                     'Error!',
-        //                     data.msg,
-        //                     'warning'
-        //                 )
-        //             }
-        //         }
-        //     })
-        // });
 
         $('#editSubmit').click(function(e) {
             e.preventDefault();

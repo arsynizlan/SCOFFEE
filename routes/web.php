@@ -37,8 +37,9 @@ Route::group([], function () {
         Route::post('/events/{id}', [EventController::class, 'update']);
         Route::delete('/events/{id}', [EventController::class, 'destroy']);
 
-        Route::get('/admin', [UserController::class, 'index']);
-        Route::get('/admin/{id}', [UserController::class, 'show']);
+        Route::get('/users', [UserController::class, 'index']);
+        Route::get('/users/{id}', [UserController::class, 'show']);
+        Route::post('/users', [UserController::class, 'store']);
 
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
