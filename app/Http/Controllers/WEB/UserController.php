@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\WEB;
 
-use App\Http\Controllers\Controller;
+use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
@@ -15,9 +20,9 @@ class UserController extends Controller
     public function index()
     {
         $data = [
-            'script' => 'components.scripts.admin'
+            'script' => 'components.scripts.users'
         ];
-        return view('pages.admin.index', $data);
+        return view('pages.users.index', $data);
     }
 
     /**
@@ -38,7 +43,58 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        if ($request->name == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan nama',
+                'status'    => false
+            ];
+        } elseif ($request->email == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan email',
+                'status'    => false
+            ];
+        } elseif (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+            $json = [
+                'msg'       => 'Email tidak valid!',
+                'status'    => false
+            ];
+        } elseif ($request->password == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan password',
+                'status'    => false
+            ];
+        } elseif (strlen($request->password) < 8) {
+            $json = [
+                'msg'       => 'Password minimal character 8!',
+                'status'    => false
+            ];
+        } elseif ($request->password != $request->password_confirmation) {
+            $json = [
+                'msg'       => 'Password tidak cocok!',
+                'status'    => false
+            ];
+        } else {
+            try {
+                User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                ])->assignRole('Admin')->user_detail()->create();
+
+                $json = [
+                    'msg' => 'Admin ditambahkan',
+                    'status' => true
+                ];
+            } catch (Exception $e) {
+                $json = [
+                    'msg'       => 'Error',
+                    'status'    => false,
+                    'e'         => $e
+                ];
+            }
+        }
+        return Response::json($json);
     }
 
     /**
@@ -49,7 +105,42 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        if (is_numeric($id)) {
+            $data = DB::table('users')
+                ->where('users.id', $id)
+                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->select('users.id', 'users.name', 'email', 'roles.name as roles')
+                ->first();
+            return Response::json($data);
+        }
+        $data = DB::table('users')
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->select('users.id', 'users.name', 'email', 'roles.name as roles')
+            ->latest('users.id')->get();
+
+
+
+
+        // User::with('roles')->orderBy('id', 'desc')
+        //     ->select('id', 'name', 'email', 'roles.name as roles')
+        //     ->get();
+
+
+        return datatables()
+            ->of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                $data = [
+                    'id' => $row->id
+                ];
+
+                return view('components.buttons.users', $data);
+            })
+
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**

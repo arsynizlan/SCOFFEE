@@ -59,7 +59,7 @@
                         <ul class="submenu">
 
                             <li class="submenu-item">
-                                <a href="{{ url('/admin') }}">List Admin</a>
+                                <a href="{{ url('/users') }}">List Users</a>
                             </li>
                             <li class="submenu-item">
                                 <a href="{{ url('/events') }}">List Event</a>
