@@ -77,30 +77,26 @@ class ForumController extends Controller
                     'forums.image as image',
                 )
                 ->where('categories.name', '=', $category)
-                ->latest('id')->paginate(5, ['forums.id'], 'asik');
+                ->latest('id')->paginate(5);
             if ($forum->total() == 0) {
-                // return errorResponse(204, 'Error', 'Belum ada data');
                 return errorResponse(404, 'Error', 'Belum ada data');
-                // abort(422, 'Invalid email: administrator not found');
-                // return successResponse(200, 'success', 'Forum by category ' . $category, $forum);
             }
             return successResponse(200, 'success', 'Forum by category ' . $category, $forum);
         }
-        $forum = DB::table('forums')
-            ->join('categories', 'forums.category_id', '=', 'categories.id')
+        $comments = Forum::join('users', 'forums.user_id', '=', 'users.id')
             ->join('contexts', 'forums.context_id', '=', 'contexts.id')
-            ->join('users', 'forums.user_id', '=', 'users.id')
+            ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->select(
-                'forums.id',
-                'users.name as user',
+                'forums.id as forum_id',
                 'categories.name as category',
                 'contexts.name as context',
-                'forums.title',
+                'users.name',
                 'forums.description',
-                'forums.image as image',
+                'forums.image'
             )
-            ->latest('id')->paginate(5, ['forums.id'], 'link');
-        return successResponse(200, 'success', 'Forums', $forum);
+            ->withCount('comments as total_comment')
+            ->paginate(5);
+        return successResponse(200, 'success', 'Forums', $comments);
     }
 
     /**
