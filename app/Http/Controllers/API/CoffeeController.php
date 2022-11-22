@@ -24,9 +24,10 @@ class CoffeeController extends Controller
                 'coffees.id',
                 'coffees.name',
                 'coffees.slug',
+                'coffees.origin',
+                'coffees.type',
                 'coffees.image',
                 'coffees.description',
-                'coffees.story',
                 'coffees.created_at',
                 'coffees.updated_at'
             )
@@ -102,9 +103,10 @@ class CoffeeController extends Controller
                     'coffees.id',
                     'coffees.name',
                     'coffees.slug',
+                    'coffees.origin',
+                    'coffees.type',
                     'coffees.image',
                     'coffees.description',
-                    'coffees.story',
                     'coffees.created_at',
                     'coffees.updated_at'
                 )->first();
@@ -119,9 +121,10 @@ class CoffeeController extends Controller
                 'coffees.id',
                 'coffees.name',
                 'coffees.slug',
+                'coffees.origin',
+                'coffees.type',
                 'coffees.image',
                 'coffees.description',
-                'coffees.story',
                 'coffees.created_at',
                 'coffees.updated_at'
             )->first();
