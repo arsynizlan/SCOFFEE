@@ -23,20 +23,5 @@ class EventsSeeder extends Seeder
         ModelsEvent::factory()->count(100)->create();
         Education::factory()->count(100)->create();
         Coffee::factory()->count(8)->create();
-
-        // $faker = Factory::create();
-
-        // for ($i = 0; $i < 10; $i++) {
-        //     $title = $faker->sentence();
-        //     ModelsEvent::create([
-        //         'image' => $faker->imageUrl(120, 50, 'cats'),
-        //         'title' => $title,
-        //         'slug' => Str::slug($title),
-        //         'body' => $faker->paragraph(2),
-        //         'date' => $faker->date,
-        //         'status_publish' =>  $faker->numberBetween(0, 1),
-        //         'user_id' => User::all()->random()->id,
-        //     ]);
-        // }
     }
 }

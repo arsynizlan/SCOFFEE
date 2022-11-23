@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -78,11 +79,7 @@ class EventController extends Controller
                 'events.created_at',
                 'events.updated_at'
             )
-            ->latest()->Paginate(5);
-        // $events = Event::latest()->paginate(5);
-        // foreach ($events as $event) {
-        //     $event->image = $event->imagePathEvent;
-        // }
+            ->latest()->Paginate(5);;
         return successResponse(200, 'success', 'List Event', $events);
     }
 
@@ -154,15 +151,17 @@ class EventController extends Controller
                     'events.created_at',
                     'events.updated_at'
                 )->first();
-            if (!$event) {
-                return errorResponse(404, 'error', 'Not Found');
-            }
-            // $event->image = $event->imagePathEvent;
-            if ($event->status_publish == 1) {
-                return successResponse(200, 'success', 'Detail Event', $event);
-            } else {
-                return errorResponse(404, 'error', 'Not Found');
-            }
+            // dd($event->date);
+            $event->createFromTimeStamp(strtotime($event->date))->diffForHumans();
+            // dd($data);
+            return successResponse(200, 'success', 'Detail Event', $event);
+            // if (!$event) {
+            //     return errorResponse(404, 'error', 'Not Found');
+            // }
+            // if ($event->status_publish == 1) {
+            // } else {
+            //     return errorResponse(404, 'error', 'Not Found');
+            // }
         }
 
         $event = Event::where('slug', $id)
