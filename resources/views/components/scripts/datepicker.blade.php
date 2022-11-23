@@ -1,3 +1,0 @@
-<script>
-    $('#datetimepicker').datepicker();
-</script>
