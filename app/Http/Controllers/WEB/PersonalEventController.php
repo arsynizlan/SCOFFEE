@@ -264,7 +264,7 @@ class PersonalEventController extends Controller
             });
 
             $json = [
-                'msg' => 'Kopi berhasil dihapus',
+                'msg' => 'Event berhasil dihapus',
                 'status' => true
             ];
         } catch (Exception $e) {
