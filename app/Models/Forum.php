@@ -19,4 +19,14 @@ class Forum extends Model
     {
         return $this->belongsTo(Context::class, 'context_id', 'id');
     }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

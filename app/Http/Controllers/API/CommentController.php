@@ -31,6 +31,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
+        // dd('masuk');
         try {
             $rules = [
                 'comment' => 'required|max:255',
@@ -71,6 +72,7 @@ class CommentController extends Controller
      */
     public function update(Request $request)
     {
+        // dd('masuk');
         $rules = [
             'comment' => 'required|max:300',
         ];
