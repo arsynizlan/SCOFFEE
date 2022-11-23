@@ -14,6 +14,29 @@ use Termwind\Components\Dd;
 
 class ForumController extends Controller
 {
+    public function groupCategory($id)
+    {
+        // dd($id);
+        $category = $id;
+        $forum = Forum::join('users', 'forums.user_id', '=', 'users.id')
+            ->join('contexts', 'forums.context_id', '=', 'contexts.id')
+            ->join('categories', 'forums.category_id', '=', 'categories.id')
+            ->select(
+                'forums.id as forum_id',
+                'categories.name as category',
+                'contexts.name as context',
+                'users.name',
+                'forums.description',
+                'forums.image'
+            )
+            ->where('categories.name', '=', $category)
+            ->withCount('comments as total_comment')
+            ->paginate(5);
+        if ($forum->total() == 0) {
+            return errorResponse(404, 'Error', 'Belum ada data');
+        }
+        return successResponse(200, 'success', 'Forum by category ' . $category, $forum);
+    }
     /**
      * Dispalay forum with comment
      *
