@@ -23,9 +23,9 @@ class EducationController extends Controller
     public function index()
     {
         $data = [
-            'script' => 'components.scripts.admin.education'
+            'script' => 'components.scripts.education'
         ];
-        return view('pages.education.admin.index', $data);
+        return view('pages.education.index', $data);
     }
 
     /**
@@ -83,7 +83,6 @@ class EducationController extends Controller
     {
         if (is_numeric($id)) {
             $data = DB::table('educations')
-                ->select('educations.*')
                 ->where('educations.id', $id)
                 ->first();
             return Response::json($data);

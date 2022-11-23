@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Judul</label>
-                        <input type="text" name="title" id="title-edit" class="form-control">
+                        <input type="text" name="title" id="title" class="form-control">
                         </label>
                         <label for="image">Image</label>
                         <div class="card-content">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-group">
                         <label for="category">Category</label>
-                        <select class="form-select" name="category" id="category-edit">
+                        <select class="form-select" name="category" id="category">
                             'Kopi Asik', 'Sumedang Kopi', 'Pejuang Coffee', 'Benih Coffee'
                             <option value="" disabled>Pilih</option>
                             <option value="Kopi Asik">Kopi Asik</option>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-group">
                         <label for="body">Body</label>
-                        <textarea name="body" id="body-edit" class="form-control"></textarea>
+                        <textarea name="body" id="body" class="form-control"></textarea>
                         </label>
                     </div>
 

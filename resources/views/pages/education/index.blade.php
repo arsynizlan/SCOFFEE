@@ -35,8 +35,8 @@
             </div>
         </div>
     </section>
-    @include('components.modals.event.admin.education.addEducation')
-    @include('components.modals.event.admin.education.editEducation')
+    @include('components.modals.education.addEducation')
+    @include('components.modals.education.editEducation')
 @endsection
 
 

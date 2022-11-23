@@ -59,6 +59,7 @@
             url: `/coffee/${id}`,
             dataType: "json",
             success: function(response) {
+
                 $('#name-edit').val(response.name);
                 $('#origin-edit').val(response.origin);
                 $('#type-edit').val(response.type);
