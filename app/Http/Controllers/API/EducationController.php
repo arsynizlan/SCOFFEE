@@ -18,8 +18,30 @@ class EducationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('category')) {
+            $category = $request->category;
+            $educations = DB::table('educations')
+                ->join('users', 'educations.user_id', '=', 'users.id')
+                ->select(
+                    'educations.id',
+                    'users.name as author',
+                    'educations.image',
+                    'educations.title',
+                    'educations.slug',
+                    'educations.body',
+                    'educations.category',
+                    'educations.created_at',
+                    'educations.updated_at'
+                )
+                ->where('category', '=', $category)
+                ->latest()->paginate(5);
+            if ($educations->total() == 0) {
+                return errorResponse(404, 'Error', 'Belum ada data');
+            }
+            return successResponse(200, 'success', 'Education by category ' . $category, $educations);
+        }
         $educations = DB::table('educations')
             ->join('users', 'educations.user_id', '=', 'users.id')
             ->select(
@@ -29,6 +51,7 @@ class EducationController extends Controller
                 'educations.title',
                 'educations.slug',
                 'educations.body',
+                'educations.category',
                 'educations.created_at',
                 'educations.updated_at'
             )
@@ -105,6 +128,7 @@ class EducationController extends Controller
                     'educations.title',
                     'educations.slug',
                     'educations.body',
+                    'educations.category',
                     'educations.created_at',
                     'educations.updated_at'
                 )->first();
@@ -122,6 +146,7 @@ class EducationController extends Controller
                 'educations.image',
                 'educations.title',
                 'educations.slug',
+                'educations.category',
                 'educations.body',
                 'educations.created_at',
                 'educations.updated_at'

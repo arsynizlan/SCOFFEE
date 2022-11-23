@@ -2,8 +2,8 @@
     let education_id;
 
     const create = () => {
-
         $(".dropify-clear").click();
+        $('#body').summernote();
         $('#createForm').trigger('reset');
         $('#createModal').modal('show');
     }
@@ -31,7 +31,7 @@
 
                 $('#body-edit').summernote('reset');
                 $('#body-edit').summernote('editor.pasteHTML', response.body);
-                $('#body-edit').summernote('');
+
 
 
                 Swal.close();
@@ -86,10 +86,7 @@
         });
     }
     $(function() {
-        $('#body').summernote({
-            height: 300
-        });
-
+        $('#body-edit').summernote();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
