@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\WEB;
 
 use Exception;
-use App\Models\Category;
+use Carbon\Carbon;
+use App\Models\Event;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
-class CategoryController extends Controller
+class PersonalEventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,9 +22,9 @@ class CategoryController extends Controller
     public function index()
     {
         $data = [
-            'script' => 'components.scripts.categories'
+            'script' => 'components.scripts.personalEvent.events'
         ];
-        return view('pages.categories.index', $data);
+        return view('pages.personalEvent.index', $data);
     }
 
     /**
@@ -42,9 +45,14 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->name == NULL) {
+        if ($request->title == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan nama kategori',
+                'msg'       => 'Mohon berikan judul event',
+                'status'    => false
+            ];
+        } elseif ($request->body == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan body event',
                 'status'    => false
             ];
         } elseif ($request->image == NULL) {
@@ -52,22 +60,38 @@ class CategoryController extends Controller
                 'msg'       => 'Mohon berikan gambar',
                 'status'    => false
             ];
+        } elseif ($request->date == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan tanggal acara',
+                'status'    => false
+            ];
         } else {
             try {
                 DB::transaction(function () use ($request) {
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = '/home/scoffema/public_html/images/category/';
+                    $destination = '/home/scoffema/public_html/images/events/';
                     $request->file('image')->move($destination, $image);
 
-                    Category::create([
-                        'name' => $request->name,
+                    if (Auth::user()->hasRole('SuperAdmin')) {
+                        $status = 1;
+                    } else {
+                        $status = 0;
+                    }
+
+                    Event::create([
+                        'title' => $request->title,
+                        'slug' => Str::slug($request->title),
+                        'date' => $request->date,
+                        'body' => $request->body,
                         'image' => $image,
+                        'user_id' => Auth::user()->id,
+                        'status_publish' => $status,
                     ]);
                 });
 
                 $json = [
-                    'msg' => 'Kategori berhasil ditambahkan',
+                    'msg' => 'Event berhasil ditambahkan',
                     'status' => true
                 ];
             } catch (Exception $e) {
@@ -90,26 +114,41 @@ class CategoryController extends Controller
     public function show($id)
     {
         if (is_numeric($id)) {
-            $data = Category::where('id', $id)
+            $data = DB::table('events')
+                ->where('id', $id)
                 ->first();
             return Response::json($data);
         }
-        $data = Category::orderBy('id', 'desc')
+        $id = Auth::user()->id;
+        $data = Event::orderBy('id', 'desc')
+            ->where('events.user_id', $id)
+            ->join('users', 'events.user_id', '=', 'users.id')
+            ->select(['events.*', 'users.name as author'])
             ->get();
         return datatables()
             ->of($data)
             ->addIndexColumn()
+            ->addColumn('created_at', function ($date) {
+                return $date->created_at ? with(new Carbon($date->updated_at))->diffForHumans() : '';
+            })
+            ->addColumn('status_publish', function ($row) {
+                if ($row->status_publish == 0) {
+                    return '<span class="badge bg-danger">Belum Dipublikasi</span>';
+                } else {
+                    return '<span class="badge bg-success">Terpublikasi</span>';
+                }
+            })
             ->addColumn('image', function ($row) {
-                return '<image class="img-thumbnail" src="https://scoffe.masuk.web.id/images/category/' . $row->image . '">';
+                return '<image class="img-thumbnail" src="https://scoffe.masuk.web.id/images/events/' . $row->image . '">';
             })
             ->addColumn('action', function ($row) {
                 $data = [
                     'id' => $row->id
                 ];
 
-                return view('components.buttons.categories', $data);
+                return view('components.buttons.events', $data);
             })
-            ->rawColumns(['action', 'image'])
+            ->rawColumns(['status_publish', 'action', 'image'])
             ->make(true);
     }
 
@@ -133,23 +172,36 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->name == NULL) {
+        if ($request->title == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan nama kategori',
+                'msg'       => 'Mohon berikan judul event',
+                'status'    => false
+            ];
+        } elseif ($request->body == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan body event',
+                'status'    => false
+            ];
+        } elseif ($request->date == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan tanggal acara',
                 'status'    => false
             ];
         } else {
             try {
-                DB::transaction(function () use ($request, $id) {
-                    DB::table('categories')->where('id', $id)->update([
-                        'name' => $request->name,
+                DB::transaction(function () use ($request, $id) {;
+                    DB::table('events')->where('id', $id)->update([
+                        'title' => $request->title,
+                        'slug' => Str::slug($request->title),
+                        'date' => $request->date,
+                        'body' => $request->body,
                     ]);
 
                     if ($request->has('image')) {
                         $oldImage = $request->image;
 
                         if ($oldImage) {
-                            $pleaseRemove = '/home/scoffema/public_html/images/category/' . $oldImage;
+                            $pleaseRemove = '/home/scoffema/public_html/images/events/' . $oldImage;
 
                             if (file_exists($pleaseRemove)) {
                                 unlink($pleaseRemove);
@@ -158,17 +210,17 @@ class CategoryController extends Controller
 
                         $extension = $request->file('image')->getClientOriginalExtension();
                         $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                        $destination = '/home/scoffema/public_html/images/category/';
+                        $destination = '/home/scoffema/public_html/images/events/';
                         $request->file('image')->move($destination, $image);
 
-                        Category::where('id', $id)->update([
+                        Event::where('id', $id)->update([
                             'image' => $image,
                         ]);
                     };
                 });
 
                 $json = [
-                    'msg' => 'Kategori berhasil disunting',
+                    'msg' => 'Event berhasil disunting',
                     'status' => true
                 ];
             } catch (Exception $e) {
@@ -191,7 +243,7 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         try {
-            $data = Category::find($id);
+            $data = Event::find($id);
             if (!$data) {
                 $json = [
                     'msg' => 'Data Tidak Ditemukan',
@@ -200,7 +252,7 @@ class CategoryController extends Controller
             }
             $oldImage = $data->image;
             if ($oldImage) {
-                $pleaseRemove = '/home/scoffema/public_html/images/category/' . $oldImage;
+                $pleaseRemove = '/home/scoffema/public_html/images/events/' . $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
@@ -208,11 +260,11 @@ class CategoryController extends Controller
             }
 
             DB::transaction(function () use ($id) {
-                DB::table('categories')->where('id', $id)->delete();
+                DB::table('events')->where('id', $id)->delete();
             });
 
             $json = [
-                'msg' => 'Category berhasil dihapus',
+                'msg' => 'Kopi berhasil dihapus',
                 'status' => true
             ];
         } catch (Exception $e) {

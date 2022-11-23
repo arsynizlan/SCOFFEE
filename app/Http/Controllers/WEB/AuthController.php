@@ -35,6 +35,11 @@ class AuthController extends Controller
         Auth::attempt($data);
 
         if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->hasRole('User')) {
+                Auth::logout();
+                return redirect('/login')->with('loginError', 'Anda tidak memiliki akses!');
+            }
             return redirect()->to('/dashboard');
         }
 

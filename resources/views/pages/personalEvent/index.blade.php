@@ -9,7 +9,11 @@
 @section('content')
     <section class="section">
         <div class="card mb-3">
-
+            <div class="card-header">
+                <button type="button" class="btn btn-outline-primary block" onclick="create()">
+                    Tambah Event
+                </button>
+            </div>
             <div class="card-body">
                 <!-- table head dark -->
                 <div class="table-responsive">
@@ -17,7 +21,7 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th width="5%">No</th>
-                                <th>Created At</th>
+                                <th>Tanggal Dibuat</th>
                                 <th>Nama Event</th>
                                 <th>Status</th>
                                 <th width="20%">Image</th>
@@ -31,10 +35,12 @@
             </div>
         </div>
     </section>
-    @include('components.modals.event.admin.editstatus')
+    @include('components.modals.personalEvent.create')
+    @include('components.modals.personalEvent.edit')
 @endsection
 
 
 @push('script')
     @include($script)
+    @include('components.scripts.dropify')
 @endpush

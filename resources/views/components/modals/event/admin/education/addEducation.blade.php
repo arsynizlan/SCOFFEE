@@ -12,13 +12,13 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Judul</label>
-                        <input type="text" name="title" id="title-edit" class="form-control" >
-                    </label>
-                    <label for="image">Image</label>
+                        <input type="text" name="title" id="title-edit" class="form-control">
+                        </label>
+                        <label for="image">Image</label>
                         <div class="card-content">
                             <div class="card-body">
                                 <!-- imgBB file uploader -->
-                                <input type="file" name="image" id="image-edit" class="imgbb-filepond">
+                                <input type="file" name="image" id="createImage" class="imgbb-filepond">
                             </div>
                         </div>
                     </div>

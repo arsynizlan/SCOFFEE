@@ -73,6 +73,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
+
+
     @stack('script')
 </body>
 

@@ -1,5 +1,13 @@
 <script>
-    let event_id;
+    let education_id;
+
+    const create = () => {
+
+        $(".dropify-clear").click();
+        $('#createForm').trigger('reset');
+        $('#createModal').modal('show');
+    }
+
 
     const edit = (id) => {
         Swal.fire({
@@ -10,22 +18,20 @@
                 Swal.showLoading()
             }
         });
-        event_id = id;
+        education_id = id;
 
         $.ajax({
             type: "get",
-            url: `/p/events/${event_id}`,
+            url: `/p/education/${education_id}`,
             dataType: "json",
             success: function(response) {
                 $('#title-edit').val(response.title);
+                $('#category-edit').val(response.category);
                 $('#image-edit').val(response.image);
 
                 $('#body-edit').summernote('reset');
                 $('#body-edit').summernote('editor.pasteHTML', response.body);
                 $('#body-edit').summernote('');
-
-                $('#date-edit').val(response.date);
-                $('#status-edit').val(response.status_publish);
 
 
                 Swal.close();
@@ -36,7 +42,7 @@
     }
     const deleteData = (id) => {
         Swal.fire({
-            title: 'Apa anda yakin untuk menghapus events ini?',
+            title: 'Apa anda yakin untuk menghapus education ini?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya',
@@ -56,7 +62,7 @@
 
                 $.ajax({
                     type: "delete",
-                    url: `/p/events/${id}`,
+                    url: `/p/education/${id}`,
                     dataType: "json",
                     success: function(response) {
                         Swal.close();
@@ -78,15 +84,60 @@
                 });
             }
         });
-
     }
     $(function() {
-        $('#body-edit').summernote();
+        $('#body').summernote({
+            height: 300
+        });
 
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
+        });
+
+        $('#createSubmit').click(function(e) {
+            e.preventDefault();
+
+            var formData = new FormData($("#createForm")[0]);
+
+            Swal.fire({
+                title: 'Mohon tunggu',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                willOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+
+            $.ajax({
+                type: "post",
+                url: "/p/education",
+                data: formData,
+                dataType: "json",
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    Swal.close();
+
+                    if (data.status) {
+                        Swal.fire(
+                            'Success!',
+                            data.msg,
+                            'success'
+                        )
+                        $('#createModal').modal('hide');
+                        $('#table').DataTable().ajax.reload();
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            data.msg,
+                            'warning'
+                        )
+                    }
+                }
+            });
         });
 
         $('#editSubmit').click(function(e) {
@@ -105,7 +156,7 @@
 
             $.ajax({
                 type: "post",
-                url: `/p/events/${event_id}`,
+                url: `/p/education/${education_id}`,
                 data: formData,
                 dataType: "json",
                 cache: false,
@@ -147,7 +198,7 @@
             responsive: true,
             serverSide: true,
             ajax: {
-                url: '/p/events/all'
+                url: '/p/education/all'
             },
             "columns": [{
                     data: 'DT_RowIndex',
@@ -155,7 +206,7 @@
                     searchable: false
                 },
                 {
-                    data: 'created_at',
+                    data: 'updated_at',
 
                 },
                 {
@@ -163,7 +214,7 @@
 
                 },
                 {
-                    data: 'status_publish',
+                    data: 'category',
                 },
                 {
                     data: 'image',

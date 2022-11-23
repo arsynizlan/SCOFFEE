@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\WEB;
 
 use Exception;
-use App\Models\Category;
+use App\Models\Coffee;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 
-class CategoryController extends Controller
+class CoffeeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,9 +20,9 @@ class CategoryController extends Controller
     public function index()
     {
         $data = [
-            'script' => 'components.scripts.categories'
+            'script' => 'components.scripts.coffee'
         ];
-        return view('pages.categories.index', $data);
+        return view('pages.coffee.index', $data);
     }
 
     /**
@@ -44,7 +45,12 @@ class CategoryController extends Controller
     {
         if ($request->name == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan nama kategori',
+                'msg'       => 'Mohon berikan nama kopi',
+                'status'    => false
+            ];
+        } elseif ($request->origin == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan asal kopi',
                 'status'    => false
             ];
         } elseif ($request->image == NULL) {
@@ -52,22 +58,37 @@ class CategoryController extends Controller
                 'msg'       => 'Mohon berikan gambar',
                 'status'    => false
             ];
+        } elseif ($request->description == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan deskripsi',
+                'status'    => false
+            ];
+        } elseif ($request->story == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan cerita kopi',
+                'status'    => false
+            ];
         } else {
             try {
                 DB::transaction(function () use ($request) {
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = '/home/scoffema/public_html/images/category/';
+                    $destination = '/home/scoffema/public_html/images/coffee/';
                     $request->file('image')->move($destination, $image);
 
-                    Category::create([
+                    Coffee::create([
                         'name' => $request->name,
+                        'slug' => Str::slug($request->name),
+                        'origin' => $request->origin,
+                        'type' => $request->type,
+                        'description' => $request->description,
+                        'story' => $request->story,
                         'image' => $image,
                     ]);
                 });
 
                 $json = [
-                    'msg' => 'Kategori berhasil ditambahkan',
+                    'msg' => 'Kopi berhasil ditambahkan',
                     'status' => true
                 ];
             } catch (Exception $e) {
@@ -90,24 +111,24 @@ class CategoryController extends Controller
     public function show($id)
     {
         if (is_numeric($id)) {
-            $data = Category::where('id', $id)
+            $data = Coffee::where('id', $id)
                 ->first();
             return Response::json($data);
         }
-        $data = Category::orderBy('id', 'desc')
+        $data = Coffee::orderBy('id', 'desc')
             ->get();
         return datatables()
             ->of($data)
             ->addIndexColumn()
             ->addColumn('image', function ($row) {
-                return '<image class="img-thumbnail" src="https://scoffe.masuk.web.id/images/category/' . $row->image . '">';
+                return '<image class="img-thumbnail" src="https://scoffe.masuk.web.id/images/coffee/' . $row->image . '">';
             })
             ->addColumn('action', function ($row) {
                 $data = [
                     'id' => $row->id
                 ];
 
-                return view('components.buttons.categories', $data);
+                return view('components.buttons.coffees', $data);
             })
             ->rawColumns(['action', 'image'])
             ->make(true);
@@ -135,21 +156,40 @@ class CategoryController extends Controller
     {
         if ($request->name == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan nama kategori',
+                'msg'       => 'Mohon berikan nama kopi',
+                'status'    => false
+            ];
+        } elseif ($request->origin == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan asal kopi',
+                'status'    => false
+            ];
+        } elseif ($request->description == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan deskripsi',
+                'status'    => false
+            ];
+        } elseif ($request->story == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan cerita kopi',
                 'status'    => false
             ];
         } else {
             try {
                 DB::transaction(function () use ($request, $id) {
-                    DB::table('categories')->where('id', $id)->update([
+                    DB::table('coffees')->where('id', $id)->update([
                         'name' => $request->name,
+                        'slug' => Str::slug($request->name),
+                        'origin' => $request->origin,
+                        'type' => $request->type,
+                        'description' => $request->description,
+                        'story' => $request->story,
                     ]);
-
                     if ($request->has('image')) {
                         $oldImage = $request->image;
 
                         if ($oldImage) {
-                            $pleaseRemove = '/home/scoffema/public_html/images/category/' . $oldImage;
+                            $pleaseRemove = '/home/scoffema/public_html/images/coffee/' . $oldImage;
 
                             if (file_exists($pleaseRemove)) {
                                 unlink($pleaseRemove);
@@ -158,17 +198,17 @@ class CategoryController extends Controller
 
                         $extension = $request->file('image')->getClientOriginalExtension();
                         $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                        $destination = '/home/scoffema/public_html/images/category/';
+                        $destination = '/home/scoffema/public_html/images/coffee/';
                         $request->file('image')->move($destination, $image);
 
-                        Category::where('id', $id)->update([
+                        Coffee::where('id', $id)->update([
                             'image' => $image,
                         ]);
                     };
                 });
 
                 $json = [
-                    'msg' => 'Kategori berhasil disunting',
+                    'msg' => 'Kopi berhasil disunting',
                     'status' => true
                 ];
             } catch (Exception $e) {
@@ -190,8 +230,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+
         try {
-            $data = Category::find($id);
+            $data = Coffee::find($id);
             if (!$data) {
                 $json = [
                     'msg' => 'Data Tidak Ditemukan',
@@ -200,7 +241,7 @@ class CategoryController extends Controller
             }
             $oldImage = $data->image;
             if ($oldImage) {
-                $pleaseRemove = '/home/scoffema/public_html/images/category/' . $oldImage;
+                $pleaseRemove = '/home/scoffema/public_html/images/coffee/' . $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
@@ -208,11 +249,11 @@ class CategoryController extends Controller
             }
 
             DB::transaction(function () use ($id) {
-                DB::table('categories')->where('id', $id)->delete();
+                DB::table('coffees')->where('id', $id)->delete();
             });
 
             $json = [
-                'msg' => 'Category berhasil dihapus',
+                'msg' => 'Kopi berhasil dihapus',
                 'status' => true
             ];
         } catch (Exception $e) {

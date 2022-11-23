@@ -9,7 +9,11 @@
 @section('content')
     <section class="section">
         <div class="card mb-3">
-
+            <div class="card-header">
+                <button type="button" class="btn btn-outline-primary block" onclick="create()">
+                    Tambah Admin
+                </button>
+            </div>
             <div class="card-body">
                 <!-- table head dark -->
                 <div class="table-responsive">
