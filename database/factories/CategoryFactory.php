@@ -17,7 +17,7 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->unique()->randomElement((['Sumedang Coffee', 'Coffee Local', 'Raosting', 'Barista', 'Manglayang Coffee'])),
+            'name' => fake()->unique()->randomElement((['Sumedang Coffee', 'Coffee Local', 'Roasting', 'Barista', 'Manglayang Coffee'])),
             'image' => 'category (' . fake()->unique()->numberBetween(1, 5) . ').png'
         ];
     }
