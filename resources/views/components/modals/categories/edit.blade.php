@@ -16,8 +16,8 @@
                         </label>
                     </div>
                     <div class="form-group">
-                        <label for="createImage">Gambar</label>
-                        <input type="file" id="createImage" name="image" data-show-loader="false"
+                        <label for="editImage">Gambar</label>
+                        <input type="file" id="editImage" name="image" data-show-loader="false"
                             class="form-control" required data-allowed-file-extensions="jpg png"
                             data-max-file-size-preview="3M" data-max-file-size="3M">
                     </div>

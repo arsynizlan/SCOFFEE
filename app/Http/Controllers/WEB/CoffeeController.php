@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class CoffeeController extends Controller
 {
@@ -43,7 +44,17 @@ class CoffeeController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->name == NULL) {
+        $rules = [
+            'name' => 'unique:coffees',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $json = [
+                'msg'       => 'Nama Kopi sudah digunakan!',
+                'status'    => false
+            ];
+            return Response::json($json);
+        } elseif ($request->name == NULL) {
             $json = [
                 'msg'       => 'Mohon berikan nama kopi',
                 'status'    => false
@@ -63,17 +74,12 @@ class CoffeeController extends Controller
                 'msg'       => 'Mohon berikan deskripsi',
                 'status'    => false
             ];
-        } elseif ($request->story == NULL) {
-            $json = [
-                'msg'       => 'Mohon berikan cerita kopi',
-                'status'    => false
-            ];
         } else {
             try {
                 DB::transaction(function () use ($request) {
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = '/home/scoffema/public_html/images/coffee/';
+                    $destination = base_path('public/images/coffee/');
                     $request->file('image')->move($destination, $image);
 
                     Coffee::create([
@@ -82,7 +88,6 @@ class CoffeeController extends Controller
                         'origin' => $request->origin,
                         'type' => $request->type,
                         'description' => $request->description,
-                        'story' => $request->story,
                         'image' => $image,
                     ]);
                 });
@@ -121,7 +126,7 @@ class CoffeeController extends Controller
             ->of($data)
             ->addIndexColumn()
             ->addColumn('image', function ($row) {
-                return '<image class="img-thumbnail" src="https://scoffe.masuk.web.id/images/coffee/' . $row->image . '">';
+                return '<image class="img-thumbnail" src="' . asset('images/coffee/' . $row->image) . '">';
             })
             ->addColumn('action', function ($row) {
                 $data = [
@@ -154,7 +159,17 @@ class CoffeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->name == NULL) {
+        $rules = [
+            'name' => 'unique:coffees',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $json = [
+                'msg'       => 'Nama Kopi sudah digunakan!',
+                'status'    => false
+            ];
+            return Response::json($json);
+        } elseif ($request->name == NULL) {
             $json = [
                 'msg'       => 'Mohon berikan nama kopi',
                 'status'    => false
@@ -169,11 +184,6 @@ class CoffeeController extends Controller
                 'msg'       => 'Mohon berikan deskripsi',
                 'status'    => false
             ];
-        } elseif ($request->story == NULL) {
-            $json = [
-                'msg'       => 'Mohon berikan cerita kopi',
-                'status'    => false
-            ];
         } else {
             try {
                 DB::transaction(function () use ($request, $id) {
@@ -183,13 +193,13 @@ class CoffeeController extends Controller
                         'origin' => $request->origin,
                         'type' => $request->type,
                         'description' => $request->description,
-                        'story' => $request->story,
                     ]);
                     if ($request->has('image')) {
-                        $oldImage = $request->image;
+                        $coffee = Coffee::find($id);
+                        $oldImage = $coffee->image;
 
                         if ($oldImage) {
-                            $pleaseRemove = '/home/scoffema/public_html/images/coffee/' . $oldImage;
+                            $pleaseRemove = base_path('public/images/coffee/') . $oldImage;
 
                             if (file_exists($pleaseRemove)) {
                                 unlink($pleaseRemove);
@@ -198,7 +208,7 @@ class CoffeeController extends Controller
 
                         $extension = $request->file('image')->getClientOriginalExtension();
                         $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                        $destination = '/home/scoffema/public_html/images/coffee/';
+                        $destination = base_path('public/images/coffee/');
                         $request->file('image')->move($destination, $image);
 
                         Coffee::where('id', $id)->update([
@@ -241,7 +251,7 @@ class CoffeeController extends Controller
             }
             $oldImage = $data->image;
             if ($oldImage) {
-                $pleaseRemove = '/home/scoffema/public_html/images/coffee/' . $oldImage;
+                $pleaseRemove = base_path('public/images/coffee/') . $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);

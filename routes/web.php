@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WEB\AuthController;
-use App\Http\Controllers\WEB\UserController;
-use App\Http\Controllers\WEB\EventController;
 use App\Http\Controllers\WEB\PersonalEventController;
 
 /*

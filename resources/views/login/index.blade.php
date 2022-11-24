@@ -7,8 +7,7 @@
     <title>Login</title>
     <link rel="stylesheet" href="{{ asset('mazer/assets/css/main/app.css') }}">
     <link rel="stylesheet" href="{{ asset('mazer/assets/css/pages/auth.css') }}">
-    <link rel="shortcut icon" href="{{ asset('mazer/assets/images/logo/favicon.svg') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('mazer/assets/images/logo/favicon.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('mazer/assets/images/logo/logomini.png') }}" type="image/png">
     <script src="{{ asset('mazer/assets/js/bootstrap.js') }}"></script>
     <script src="{{ asset('mazer/assets/js/app.js') }}"></script>
 

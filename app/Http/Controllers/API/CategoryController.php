@@ -46,7 +46,7 @@ class CategoryController extends Controller
         try {
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = 'images/category//';
+            $destination = base_path('public/images/category/');
             $request->file('image')->move($destination, $image);
 
             $category = Category::create([
@@ -105,7 +105,7 @@ class CategoryController extends Controller
 
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = 'images/category/';
+                    $destination = base_path('public/images/category/');
                     $request->file('image')->move($destination, $image);
 
                     Category::where('id', $id)->update([
@@ -113,14 +113,14 @@ class CategoryController extends Controller
                         'image' => $image,
                     ]);
                 } elseif ($oldImage) {
-                    $pleaseRemove = 'images/category/' . $oldImage;
+                    $pleaseRemove = base_path('public/images/category/') . $oldImage;
                     if (file_exists($pleaseRemove)) {
                         unlink($pleaseRemove);
                     }
 
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = 'images/category/';
+                    $destination = base_path('public/images/category/');
                     $request->file('image')->move($destination, $image);
                 }
             }
@@ -139,10 +139,19 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         try {
-            Category::findOrFail($id);
-            DB::transaction(function () use ($id) {
-                Category::where('id', $id)->delete();
-            });
+            $category = Category::find($id);
+            if (!$category) {
+                return errorResponse(404, 'error', 'Not Found');
+            }
+            $oldImage = $category->image;
+            if ($oldImage) {
+                $pleaseRemove = base_path('public/images/category/') . $oldImage;
+
+                if (file_exists($pleaseRemove)) {
+                    unlink($pleaseRemove);
+                }
+            }
+            Category::destroy($id);
             return successResponse(202, 'success', 'Berhasil Hapus Category', null);
         } catch (Exception $e) {
             return errorResponse(400, 'error', $e);

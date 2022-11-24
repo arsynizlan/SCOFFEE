@@ -92,7 +92,7 @@ class EducationController extends Controller
         try {
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = 'images/education/';
+            $destination = base_path('public/images/education/');
             $request->file('image')->move($destination, $image);
 
             $education = Education::create([
@@ -195,7 +195,7 @@ class EducationController extends Controller
         if ($request->hasFile('image')) {
             $oldImage = $education->image;
             if ($oldImage) {
-                $pleaseRemove = 'images/educa/' .  $oldImage;
+                $pleaseRemove = base_path('public/images/education/') .  $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
@@ -204,7 +204,7 @@ class EducationController extends Controller
 
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = 'images/educa/';
+            $destination = base_path('public/images/education/');
             $request->file('image')->move($destination, $image);
 
             $education->update([
@@ -241,7 +241,7 @@ class EducationController extends Controller
         }
         $oldImage = $event->image;
         if ($oldImage) {
-            $pleaseRemove = 'images/educa/' . $oldImage;
+            $pleaseRemove = base_path('public/images/education/') . $oldImage;
 
             if (file_exists($pleaseRemove)) {
                 unlink($pleaseRemove);

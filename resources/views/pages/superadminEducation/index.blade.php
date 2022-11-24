@@ -2,18 +2,14 @@
 
 @section('title')
     <div class="page-heading">
-        <h3>List User</h3>
+        <h3>Edukasi</h3>
     </div>
 @endsection
 
 @section('content')
     <section class="section">
         <div class="card mb-3">
-            <div class="card-header">
-                <button type="button" class="btn btn-outline-primary block" onclick="create()">
-                    Tambah Admin
-                </button>
-            </div>
+
             <div class="card-body">
                 <!-- table head dark -->
                 <div class="table-responsive">
@@ -21,9 +17,10 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th width="5%">No</th>
-                                <th>Nama</th>
-                                <th>Email</th>
-                                <th>Role</th>
+                                <th>Nama Edukasi</th>
+                                <th>Nama Pembuat</th>
+                                <th>Kategori</th>
+                                <th width="20%">Image</th>
                                 <th width="20%">Aksi</th>
                             </tr>
                         </thead>
@@ -34,8 +31,7 @@
             </div>
         </div>
     </section>
-    @include('components.modals.users.create')
-    @include('components.modals.users.edit')
+    @include('components.modals.superadmin.info')
 @endsection
 
 

@@ -5,7 +5,7 @@ use App\Http\Controllers\WEB\UserController;
 use App\Http\Controllers\WEB\EventController;
 use App\Http\Controllers\WEB\CoffeeController;
 use App\Http\Controllers\WEB\CategoryController;
-use App\Http\Controllers\WEB\PersonalEventController;
+use App\Http\Controllers\WEB\EducationController;
 
 Route::get('/events', [EventController::class, 'index']);
 Route::get('/events/{id}', [EventController::class, 'show']);
@@ -30,3 +30,7 @@ Route::get('/coffee/{id}', [CoffeeController::class, 'show']);
 Route::post('/coffee', [CoffeeController::class, 'store']);
 Route::post('/coffee/{id}', [CoffeeController::class, 'update']);
 Route::delete('/coffee/{id}', [CoffeeController::class, 'destroy']);
+
+Route::get('/education', [EducationController::class, 'indexForSuperAdmin']);
+Route::get('/education/{id}', [EducationController::class, 'showForSuperAdmin']);
+Route::delete('/education/{id}', [EducationController::class, 'destroyForSuperAdmin']);

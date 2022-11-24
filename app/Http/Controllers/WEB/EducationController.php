@@ -4,7 +4,7 @@ namespace App\Http\Controllers\WEB;
 
 use Exception;
 use Carbon\Carbon;
-use App\Models\Event;
+use App\Models\Education;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
-class PersonalEventController extends Controller
+
+class EducationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,9 +24,9 @@ class PersonalEventController extends Controller
     public function index()
     {
         $data = [
-            'script' => 'components.scripts.personalEvent.events'
+            'script' => 'components.scripts.education'
         ];
-        return view('pages.personalEvent.index', $data);
+        return view('pages.education.index', $data);
     }
 
     /**
@@ -46,9 +47,8 @@ class PersonalEventController extends Controller
      */
     public function store(Request $request)
     {
-
         $rules = [
-            'title' => 'unique:events',
+            'title' => 'unique:educations',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -59,12 +59,17 @@ class PersonalEventController extends Controller
             return Response::json($json);
         } elseif ($request->title == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan judul event',
+                'msg'       => 'Mohon berikan judul',
+                'status'    => false
+            ];
+        } elseif ($request->category == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan asal kopi',
                 'status'    => false
             ];
         } elseif ($request->body == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan body event',
+                'msg'       => 'Mohon berikan deskripsi',
                 'status'    => false
             ];
         } elseif ($request->image == NULL) {
@@ -72,38 +77,26 @@ class PersonalEventController extends Controller
                 'msg'       => 'Mohon berikan gambar',
                 'status'    => false
             ];
-        } elseif ($request->date == NULL) {
-            $json = [
-                'msg'       => 'Mohon berikan tanggal acara',
-                'status'    => false
-            ];
         } else {
             try {
                 DB::transaction(function () use ($request) {
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = base_path('public/images/events/');
+                    $destination = base_path('public/images/education/');
                     $request->file('image')->move($destination, $image);
 
-                    if (Auth::user()->hasRole('SuperAdmin')) {
-                        $status = 1;
-                    } else {
-                        $status = 0;
-                    }
-
-                    Event::create([
+                    Education::create([
                         'title' => $request->title,
                         'slug' => Str::slug($request->title),
-                        'date' => $request->date,
+                        'category' => $request->category,
                         'body' => $request->body,
                         'image' => $image,
                         'user_id' => Auth::user()->id,
-                        'status_publish' => $status,
                     ]);
                 });
 
                 $json = [
-                    'msg' => 'Event berhasil ditambahkan',
+                    'msg' => 'Edukasi berhasil ditambahkan',
                     'status' => true
                 ];
             } catch (Exception $e) {
@@ -126,41 +119,32 @@ class PersonalEventController extends Controller
     public function show($id)
     {
         if (is_numeric($id)) {
-            $data = DB::table('events')
-                ->where('id', $id)
+            $data = DB::table('educations')
+                ->where('educations.id', $id)
                 ->first();
             return Response::json($data);
         }
-        $id = Auth::user()->id;
-        $data = Event::orderBy('id', 'desc')
-            ->where('events.user_id', $id)
-            ->join('users', 'events.user_id', '=', 'users.id')
-            ->select(['events.*', 'users.name as author'])
+        $data = Education::orderBy('id', 'desc')
+            ->join('users', 'educations.user_id', '=', 'users.id')
+            ->where('educations.user_id', '=', auth()->user()->id)
+            ->select('educations.*')
             ->get();
         return datatables()
             ->of($data)
+            ->editColumn('updated_at', function ($date) {
+                return $date->updated_at ? with(new Carbon($date->updated_at))->diffForHumans() : '';
+            })
             ->addIndexColumn()
-            ->addColumn('created_at', function ($date) {
-                return $date->created_at ? with(new Carbon($date->updated_at))->diffForHumans() : '';
-            })
-            ->addColumn('status_publish', function ($row) {
-                if ($row->status_publish == 0) {
-                    return '<span class="badge bg-danger">Belum Dipublikasi</span>';
-                } else {
-                    return '<span class="badge bg-success">Terpublikasi</span>';
-                }
-            })
             ->addColumn('image', function ($row) {
-                return '<image class="img-thumbnail" src="' . asset('images/events/' . $row->image) . '">';
+                return '<image class="img-thumbnail" src="' . asset('images/education/' . $row->image) . '">';
             })
             ->addColumn('action', function ($row) {
                 $data = [
                     'id' => $row->id
                 ];
-
-                return view('components.buttons.events', $data);
+                return view('components.buttons.admin.educations', $data);
             })
-            ->rawColumns(['status_publish', 'action', 'image'])
+            ->rawColumns(['action', 'image'])
             ->make(true);
     }
 
@@ -184,9 +168,8 @@ class PersonalEventController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $rules = [
-            'title' => 'unique:events',
+            'title' => 'unique:educations',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -197,35 +180,34 @@ class PersonalEventController extends Controller
             return Response::json($json);
         } elseif ($request->title == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan judul event',
+                'msg'       => 'Mohon berikan judul',
+                'status'    => false
+            ];
+        } elseif ($request->category == NULL) {
+            $json = [
+                'msg'       => 'Mohon berikan asal kopi',
                 'status'    => false
             ];
         } elseif ($request->body == NULL) {
             $json = [
-                'msg'       => 'Mohon berikan body event',
-                'status'    => false
-            ];
-        } elseif ($request->date == NULL) {
-            $json = [
-                'msg'       => 'Mohon berikan tanggal acara',
+                'msg'       => 'Mohon berikan deskripsi',
                 'status'    => false
             ];
         } else {
             try {
-                DB::transaction(function () use ($request, $id) {;
-                    DB::table('events')->where('id', $id)->update([
+                DB::transaction(function () use ($request, $id) {
+                    DB::table('educations')->where('id', $id)->update([
                         'title' => $request->title,
                         'slug' => Str::slug($request->title),
-                        'date' => $request->date,
+                        'category' => $request->category,
                         'body' => $request->body,
+                        'user_id' => Auth::user()->id,
                     ]);
-
                     if ($request->has('image')) {
-                        $event = Event::find($id);
-                        $oldImage = $event->image;
-
+                        $education = Education::find($id);
+                        $oldImage = $education->image;
                         if ($oldImage) {
-                            $pleaseRemove = 'images/events/' . $oldImage;
+                            $pleaseRemove = base_path('public/images/education/')  . $oldImage;
 
                             if (file_exists($pleaseRemove)) {
                                 unlink($pleaseRemove);
@@ -234,17 +216,17 @@ class PersonalEventController extends Controller
 
                         $extension = $request->file('image')->getClientOriginalExtension();
                         $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                        $destination = base_path('public/images/events/');
+                        $destination = base_path('public/images/education/');
                         $request->file('image')->move($destination, $image);
 
-                        Event::where('id', $id)->update([
+                        Education::where('id', $id)->update([
                             'image' => $image,
                         ]);
                     };
                 });
 
                 $json = [
-                    'msg' => 'Event berhasil disunting',
+                    'msg' => 'Edukasi berhasil disunting',
                     'status' => true
                 ];
             } catch (Exception $e) {
@@ -267,16 +249,16 @@ class PersonalEventController extends Controller
     public function destroy($id)
     {
         try {
-            $data = Event::find($id);
-            if (!$data) {
+            $event = Education::find($id);
+            if (!$event) {
                 $json = [
                     'msg' => 'Data Tidak Ditemukan',
                     'status' => false,
                 ];
             }
-            $oldImage = $data->image;
+            $oldImage = $event->image;
             if ($oldImage) {
-                $pleaseRemove = base_path('public/images/events/') . $oldImage;
+                $pleaseRemove = base_path('public/images/education/') . $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
@@ -284,11 +266,91 @@ class PersonalEventController extends Controller
             }
 
             DB::transaction(function () use ($id) {
-                DB::table('events')->where('id', $id)->delete();
+                DB::table('educations')->where('id', $id)->delete();
             });
 
             $json = [
-                'msg' => 'Event berhasil dihapus',
+                'msg' => 'Edukasi berhasil dihapus',
+                'status' => true
+            ];
+        } catch (Exception $e) {
+            $json = [
+                'msg' => 'error',
+                'status' => false,
+                'e' => $e,
+            ];
+        };
+
+        return Response::json($json);
+    }
+
+    /** SuperAdmin Only */
+    public function indexForSuperAdmin()
+    {
+        $data = [
+            'script' => 'components.scripts.superadmin.education'
+        ];
+        return view('pages.superadminEducation.index', $data);
+    }
+
+
+    public function showForSuperAdmin($id)
+    {
+        if (is_numeric($id)) {
+            $data = DB::table('educations')
+                ->join('users', 'educations.user_id', '=', 'users.id')
+                ->select(['educations.*', 'users.name as author'])
+                ->where('educations.id', $id)
+                ->first();
+            return Response::json($data);
+        }
+
+        $data = Education::orderBy('id', 'desc')
+            ->join('users', 'educations.user_id', '=', 'users.id')
+            ->select(['educations.*', 'users.name as author'])
+            ->get();
+        return datatables()
+            ->of($data)
+            ->addIndexColumn()
+            ->addColumn('image', function ($row) {
+                return '<image class="img-thumbnail" src="' . asset('images/education/' . $row->image) . '">';
+            })
+            ->addColumn('action', function ($row) {
+                $data = [
+                    'id' => $row->id
+                ];
+
+                return view('components.buttons.superadmin.educations', $data);
+            })
+            ->rawColumns(['action', 'image'])
+            ->make(true);
+    }
+
+    public function destroyForSuperAdmin($id)
+    {
+        try {
+            $event = Education::find($id);
+            if (!$event) {
+                $json = [
+                    'msg' => 'Data Tidak Ditemukan',
+                    'status' => false,
+                ];
+            }
+            $oldImage = $event->image;
+            if ($oldImage) {
+                $pleaseRemove = base_path('public/images/education/') . $oldImage;
+
+                if (file_exists($pleaseRemove)) {
+                    unlink($pleaseRemove);
+                }
+            }
+
+            DB::transaction(function () use ($id) {
+                DB::table('educations')->where('id', $id)->delete();
+            });
+
+            $json = [
+                'msg' => 'Edukasi berhasil dihapus',
                 'status' => true
             ];
         } catch (Exception $e) {

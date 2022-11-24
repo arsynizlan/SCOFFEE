@@ -77,7 +77,7 @@ class EventController extends Controller
                 }
             })
             ->addColumn('image', function ($row) {
-                return '<image class="img-thumbnail" src="https://scoffe.masuk.web.id/images/events/' . $row->image . '">';
+                return '<image class="img-thumbnail" src="' . asset('images/events/' . $row->image) . '">';
             })
             ->addColumn('action', function ($row) {
                 $data = [
@@ -149,7 +149,7 @@ class EventController extends Controller
             }
             $oldImage = $event->image;
             if ($oldImage) {
-                $pleaseRemove = '/home/scoffema/public_html/images/events/' . $oldImage;
+                $pleaseRemove = 'images/events/' . $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);

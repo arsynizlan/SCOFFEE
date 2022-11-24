@@ -4,12 +4,13 @@
 
 
     const create = () => {
+        $('#createForm').trigger('reset');
+        $('#createModal').modal('show');
         $('#body').summernote({
             height: 300
         });
+        $('#body').summernote('reset');
         $(".dropify-clear").click();
-        $('#createForm').trigger('reset');
-        $('#createModal').modal('show');
     }
 
     const edit = (id) => {

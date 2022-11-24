@@ -2,7 +2,7 @@
 
 @section('title')
     <div class="page-heading">
-        <h3>Events</h3>
+        <h3>Event</h3>
     </div>
 @endsection
 

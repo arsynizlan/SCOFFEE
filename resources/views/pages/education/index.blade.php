@@ -35,8 +35,10 @@
             </div>
         </div>
     </section>
-    @include('components.modals.education.addEducation')
-    @include('components.modals.education.editEducation')
+    {{-- @include('components.modals.education.addEducation') --}}
+    @include('components.modals.education.create')
+    @include('components.modals.education.edit')
+    {{-- @include('components.modals.education.editEducation') --}}
 @endsection
 
 

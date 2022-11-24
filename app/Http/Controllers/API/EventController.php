@@ -106,7 +106,7 @@ class EventController extends Controller
         try {
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = 'images/events/';
+            $destination = base_path('public/images/events/');
             $request->file('image')->move($destination, $image);
 
             if (Auth::user()->hasRole('SuperAdmin')) {
@@ -212,7 +212,7 @@ class EventController extends Controller
         if ($request->hasFile('image')) {
             $oldImage = $event->image;
             if ($oldImage) {
-                $pleaseRemove = 'images/events/' .  $oldImage;
+                $pleaseRemove = base_path('public/images/events/') .  $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
@@ -221,7 +221,7 @@ class EventController extends Controller
 
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = 'images/events/';
+            $destination = base_path('public/images/events/');
             $request->file('image')->move($destination, $image);
 
             $event->update([
@@ -263,7 +263,7 @@ class EventController extends Controller
         }
         $oldImage = $event->image;
         if ($oldImage) {
-            $pleaseRemove = 'images/events/' . $oldImage;
+            $pleaseRemove = base_path('public/images/events/') . $oldImage;
 
             if (file_exists($pleaseRemove)) {
                 unlink($pleaseRemove);

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -42,7 +43,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->name == NULL) {
+        $rules = [
+            'name' => 'unique:categories',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $json = [
+                'msg'       => 'Nama kategori sudah digunakan!',
+                'status'    => false
+            ];
+            return Response::json($json);
+        } elseif ($request->name == NULL) {
             $json = [
                 'msg'       => 'Mohon berikan nama kategori',
                 'status'    => false
@@ -57,7 +68,7 @@ class CategoryController extends Controller
                 DB::transaction(function () use ($request) {
                     $extension = $request->file('image')->getClientOriginalExtension();
                     $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                    $destination = '/home/scoffema/public_html/images/category/';
+                    $destination = base_path('public/images/category/');
                     $request->file('image')->move($destination, $image);
 
                     Category::create([
@@ -100,7 +111,7 @@ class CategoryController extends Controller
             ->of($data)
             ->addIndexColumn()
             ->addColumn('image', function ($row) {
-                return '<image class="img-thumbnail" src="https://scoffe.masuk.web.id/images/category/' . $row->image . '">';
+                return '<image class="img-thumbnail" src="' . asset('images/category/' . $row->image) . '">';
             })
             ->addColumn('action', function ($row) {
                 $data = [
@@ -133,7 +144,17 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->name == NULL) {
+        $rules = [
+            'name' => 'unique:categories',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $json = [
+                'msg'       => 'Nama kategori sudah digunakan!',
+                'status'    => false
+            ];
+            return Response::json($json);
+        } elseif ($request->name == NULL) {
             $json = [
                 'msg'       => 'Mohon berikan nama kategori',
                 'status'    => false
@@ -146,10 +167,11 @@ class CategoryController extends Controller
                     ]);
 
                     if ($request->has('image')) {
-                        $oldImage = $request->image;
+                        $category = Category::find($id);
+                        $oldImage = $category->image;
 
                         if ($oldImage) {
-                            $pleaseRemove = '/home/scoffema/public_html/images/category/' . $oldImage;
+                            $pleaseRemove = base_path('public/images/category/') . $oldImage;
 
                             if (file_exists($pleaseRemove)) {
                                 unlink($pleaseRemove);
@@ -158,7 +180,7 @@ class CategoryController extends Controller
 
                         $extension = $request->file('image')->getClientOriginalExtension();
                         $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                        $destination = '/home/scoffema/public_html/images/category/';
+                        $destination = base_path('public/images/category/');
                         $request->file('image')->move($destination, $image);
 
                         Category::where('id', $id)->update([
@@ -200,7 +222,7 @@ class CategoryController extends Controller
             }
             $oldImage = $data->image;
             if ($oldImage) {
-                $pleaseRemove = '/home/scoffema/public_html/images/category/' . $oldImage;
+                $pleaseRemove = base_path('public/images/category/') . $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);

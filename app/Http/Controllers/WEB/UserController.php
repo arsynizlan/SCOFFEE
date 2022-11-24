@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -43,8 +44,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
-        if ($request->name == NULL) {
+        $rules = [
+            'email' => 'unique:users',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $json = [
+                'msg'       => 'Email sudah digunakan!',
+                'status'    => false
+            ];
+            return Response::json($json);
+        } elseif ($request->name == NULL) {
             $json = [
                 'msg'       => 'Mohon berikan nama',
                 'status'    => false
@@ -119,15 +129,6 @@ class UserController extends Controller
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->select('users.id', 'users.name', 'email', 'roles.name as roles')
             ->latest('users.id')->get();
-
-
-
-
-        // User::with('roles')->orderBy('id', 'desc')
-        //     ->select('id', 'name', 'email', 'roles.name as roles')
-        //     ->get();
-
-
         return datatables()
             ->of($data)
             ->addIndexColumn()

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\WEB\Admin\EducationController;
+use App\Http\Controllers\WEB\EducationController;
 
 Route::prefix('p')->group(function () {
     Route::get('/education', [EducationController::class, 'index']);

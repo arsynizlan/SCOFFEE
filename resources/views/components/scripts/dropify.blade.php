@@ -13,5 +13,15 @@
             }
         });
         $('.dropify-clear').click();
+
+        $('#editImage').dropify({
+            messages: {
+                'default': 'Masukan Gambar',
+                'replace': 'Drag and drop atau click untuk mengganti',
+                'remove': 'Remove',
+                'error': 'Ooops, something wrong happended.'
+            }
+        });
+        $('.dropify-clear').click();
     });
 </script>

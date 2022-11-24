@@ -2,9 +2,13 @@
     let education_id;
 
     const create = () => {
-        $(".dropify-clear").click();
-        $('#body').summernote();
         $('#createForm').trigger('reset');
+        $('#body').summernote({
+            height: 300
+        });
+        $('#body').summernote('reset');
+
+        $(".dropify-clear").click();
         $('#createModal').modal('show');
     }
 

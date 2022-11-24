@@ -36,11 +36,7 @@
                         <textarea name="description" id="description" class="form-control"></textarea>
                         </label>
                     </div>
-                    <div class="form-group">
-                        <label for="story">Cerita Kopi</label>
-                        <textarea name="story" id="story" class="form-control"></textarea>
-                        </label>
-                    </div>
+
                 </div>
 
                 <div class="modal-footer">

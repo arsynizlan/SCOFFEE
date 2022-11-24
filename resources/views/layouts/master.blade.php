@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="{{ asset('mazer/assets/css/main/app.css') }}">
     <link rel="stylesheet" href="{{ asset('mazer/assets/css/main/app-dark.css') }}">
     <link rel="stylesheet" href="{{ asset('mazer/assets/css/main/custom.css') }}">
-    <link rel="shortcut icon" href="{{ asset('mazer/assets/images/logo/favicon.svg') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('mazer/assets/images/logo/favicon.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('mazer/assets/images/logo/logomini.png') }}" type="image/png">
     {{-- DataTables --}}
     <link rel="stylesheet" type="text/css"
         href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/datatables.css" />
@@ -71,9 +70,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote.min.js"
         integrity="sha512-6rE6Bx6fCBpRXG/FWpQmvguMWDLWMQjPycXMr35Zx/HRD9nwySZswkkLksgyQcvrpYMx0FELLJVBvWFtubZhDQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-
 
     @stack('script')
 </body>

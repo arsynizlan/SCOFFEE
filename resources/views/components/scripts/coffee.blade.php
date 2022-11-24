@@ -4,6 +4,8 @@
     const create = () => {
         $(".dropify-clear").click();
         $('#createForm').trigger('reset');
+        $('#description').summernote('reset');
+        $('#description').summernote();
         $('#createModal').modal('show');
     }
 
@@ -33,8 +35,6 @@
                 $("#type-info").attr("readonly", true)
                 $('#description-info').summernote('code', response.description);
                 $('#description-info').summernote('disable');
-                $('#story-info').summernote('code', response.story);
-                $('#story-info').summernote('disable');
 
                 Swal.close();
                 $('#infoModal').modal('show');
@@ -64,7 +64,7 @@
                 $('#origin-edit').val(response.origin);
                 $('#type-edit').val(response.type);
                 $('#description-edit').summernote('code', response.description);
-                $('#story-edit').summernote('code', response.story);
+
 
                 Swal.close();
                 $('#editModal').modal('show');
@@ -120,11 +120,6 @@
 
 
     $(function() {
-        $('#description').summernote();
-
-        $('#story').summernote();
-
-
 
         $.ajaxSetup({
             headers: {

@@ -43,7 +43,7 @@
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {{ Request::segment(1) === 'dashboard' ? 'active' : '' }}">
                     <a href="{{ url('/dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
@@ -51,30 +51,47 @@
                 </li>
 
                 @role('SuperAdmin')
-                    <li class="sidebar-item  has-sub">
+                    <li
+                        class="sidebar-item  has-sub
+                    {{ Request::segment(1) === 'users' ? 'active' : '' }}
+                    {{ Request::segment(1) === 'events' ? 'active' : '' }}
+                    {{ Request::segment(1) === 'education' ? 'active' : '' }}
+                    {{ Request::segment(1) === 'categories' ? 'active' : '' }}
+                    {{ Request::segment(1) === 'coffee' ? 'active' : '' }}
+                    ">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-stack"></i>
                             <span>Data Master</span>
                         </a>
-                        <ul class="submenu">
+                        <ul
+                            class="submenu
+                            {{ (Request::segment(1) == 'p') === 'users' ? 'active' : '' }}
+                            {{ Request::segment(1) === 'events' ? 'active' : '' }}
+                            {{ Request::segment(1) === 'education' ? 'active' : '' }}
+                            {{ Request::segment(1) === 'categories' ? 'active' : '' }}
+                            {{ Request::segment(1) === 'coffee' ? 'active' : '' }}
+                        ">
 
-                            <li class="submenu-item">
+                            <li class="submenu-item {{ Request::segment(1) === 'users' ? 'active' : '' }}">
                                 <a href="{{ url('/users') }}">List Admin</a>
                             </li>
-                            <li class="submenu-item">
+                            <li class="submenu-item {{ Request::segment(1) === 'events' ? 'active' : '' }}">
                                 <a href="{{ url('/events') }}">List Event</a>
                             </li>
-                            <li class="submenu-item">
+                            <li class="submenu-item {{ Request::segment(1) === 'education' ? 'active' : '' }}">
+                                <a href="{{ url('/education') }}">List Edukasi</a>
+                            </li>
+                            <li class="submenu-item {{ Request::segment(1) === 'categories' ? 'active' : '' }}">
                                 <a href="{{ url('/categories') }}">Kategori</a>
                             </li>
-                            <li class="submenu-item">
+                            <li class="submenu-item {{ Request::segment(1) === 'coffee' ? 'active' : '' }}">
                                 <a href="{{ url('/coffee') }}">Kopi</a>
                             </li>
                         </ul>
                     </li>
                 @endrole
 
-                <li class="sidebar-item">
+                <li class="sidebar-item {{ Request::segment(2) === 'events' ? 'active' : '' }}">
                     <a href="{{ url('/p/events') }}" class='sidebar-link'>
                         <i class="bi bi-chat-dots-fill"></i>
                         <span>Event</span>
@@ -82,7 +99,7 @@
                 </li>
 
                 @role('Admin')
-                    <li class="sidebar-item">
+                    <li class="sidebar-item {{ Request::segment(2) === 'education' ? 'active' : '' }}">
                         <a href="{{ url('/p/education') }}" class='sidebar-link'>
                             <i class="bi bi-chat-dots-fill"></i>
                             <span>Education</span>

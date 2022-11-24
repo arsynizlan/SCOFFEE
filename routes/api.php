@@ -44,12 +44,12 @@ Route::group([], function () {
 
         Route::group(['middleware' => ['role:Admin']], function () {
             require __DIR__ . '/api/education.php';
-            require __DIR__ . '/api/coffee.php';
         });
 
         /** Super Admin ONLY*/
         Route::group(['middleware' => ['role:SuperAdmin']], function () {
             require __DIR__ . '/api/category.php';
+            require __DIR__ . '/api/coffee.php';
 
             Route::get('/listevents', [EventController::class, 'Events']);
             Route::get('/users', [UserController::class, 'getUser']);

@@ -70,7 +70,7 @@ class CoffeeController extends Controller
         try {
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = 'images/coffee/';
+            $destination = base_path('public/images/coffee/');
             $request->file('image')->move($destination, $image);
 
             $coffee = Coffee::create([
@@ -174,7 +174,7 @@ class CoffeeController extends Controller
         if ($request->hasFile('image')) {
             $oldImage = $coffees->image;
             if ($oldImage) {
-                $pleaseRemove = 'images/coffee/' .  $oldImage;
+                $pleaseRemove = base_path('public/images/coffee/') .  $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
@@ -183,7 +183,7 @@ class CoffeeController extends Controller
 
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = 'images/coffee/';
+            $destination = base_path('public/images/coffee/');
             $request->file('image')->move($destination, $image);
 
             $coffees->update([
@@ -222,7 +222,7 @@ class CoffeeController extends Controller
         }
         $oldImage = $coffees->image;
         if ($oldImage) {
-            $pleaseRemove = 'images/coffee/' . $oldImage;
+            $pleaseRemove = base_path('public/images/coffee/') . $oldImage;
 
             if (file_exists($pleaseRemove)) {
                 unlink($pleaseRemove);
