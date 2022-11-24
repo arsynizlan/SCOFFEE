@@ -136,7 +136,6 @@ class EventController extends Controller
     public function show($id)
     {
         if (is_numeric($id)) {
-
             $event = Event::where('events.id', $id)
                 ->join('users', 'events.user_id', '=', 'users.id')
                 ->select(
@@ -151,17 +150,15 @@ class EventController extends Controller
                     'events.created_at',
                     'events.updated_at'
                 )->first();
-            // dd($event->date);
-            $event->createFromTimeStamp(strtotime($event->date))->diffForHumans();
-            // dd($data);
-            return successResponse(200, 'success', 'Detail Event', $event);
-            // if (!$event) {
-            //     return errorResponse(404, 'error', 'Not Found');
-            // }
-            // if ($event->status_publish == 1) {
-            // } else {
-            //     return errorResponse(404, 'error', 'Not Found');
-            // }
+            // dd($event);
+            if (!$event) {
+                return errorResponse(404, 'error', 'Not Found');
+            }
+            if ($event->status_publish == 1) {
+                return successResponse(200, 'success', 'Detail Event', $event);
+            } else {
+                return errorResponse(404, 'error', 'Not Found');
+            }
         }
 
         $event = Event::where('slug', $id)
