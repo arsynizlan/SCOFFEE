@@ -21,7 +21,6 @@ class ContentFactory extends Factory
             'title' => fake()->sentence(fake()->numberBetween(4, 9)),
             'slug' => fake()->slug(),
             'body' => fake()->paragraphs(fake()->numberBetween(5, 20)),
-            // 'status_publish' =>  fake()->numberBetween(0, 1),
         ];
     }
 }

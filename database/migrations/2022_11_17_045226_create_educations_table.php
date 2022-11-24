@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('educations', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->unique();
             $table->text('body');
             $table->string('slug');
             $table->string('category');

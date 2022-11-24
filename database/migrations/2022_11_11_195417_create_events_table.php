@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->string('image');
-            $table->string('title');
+            $table->string('title')->unique();
             $table->string('slug');
             $table->text('body');
             $table->date('date');

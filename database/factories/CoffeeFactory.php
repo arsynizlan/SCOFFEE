@@ -18,7 +18,7 @@ class CoffeeFactory extends Factory
      */
     public function definition()
     {
-        $body = fake()->paragraph(fake()->numberBetween(5, 20));
+        $body = fake()->paragraph(fake()->numberBetween(1, 5));
         $coffes = ['Kopi Communal Berdikari (Java Sumedang)', 'Kopi KWT Mekar Arum (Kopi Tanjoeng)', 'Kopi Barokah Makmur (Kopi Karuhun)', 'Matim Coffee', 'Kopi Maju Mekar (Kopi Boehoen)', 'Kopi Lingga Sari/Sukasari', 'Kopi Gunung Susuru/Kadiran', 'Kopi Hurip Lestari/Gold Dib.'];
         $coffe = fake()->randomElement(($coffes));
         return [
@@ -30,7 +30,6 @@ class CoffeeFactory extends Factory
             'type' => fake()->randomElement((['Arabica', 'Robusta'])),
             'image' => 'coffee (' . fake()->numberBetween(1, 10) . ')' . '.jpg',
             'description' => '<p>' . $body . '</p>',
-            'story' => '<p>' . fake()->paragraph(fake()->numberBetween(5, 20)) . '</p>',
             'slug' => Str::slug($coffe),
         ];
     }

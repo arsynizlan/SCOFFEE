@@ -23,7 +23,7 @@ class CommentFactory extends Factory
             ->get()->random()->id;
         return [
             'user_id' => $model,
-            'content' => fake()->paragraph(fake()->numberBetween(2, 9))
+            'content' => fake()->paragraph(fake()->numberBetween(1, 5))
         ];
     }
 }

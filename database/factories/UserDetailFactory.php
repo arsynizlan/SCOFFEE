@@ -20,7 +20,7 @@ class UserDetailFactory extends Factory
         $user = 'profile (' . fake()->numberBetween(1, 11) . ').png';
         return [
             'user_id' => User::factory(),
-            'description' => fake()->paragraph(fake()->numberBetween(4, 10)),
+            'description' => fake()->paragraph(fake()->numberBetween(1, 5)),
             'born' => fake()->date(),
             'image' => $user,
             'academic' => fake()->randomElement((['Baru Lulus S1', 'Masih Semester 1', 'Maba Mahasiswa Baheula', 'Baru Semester 12'])),

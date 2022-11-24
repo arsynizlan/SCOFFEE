@@ -23,7 +23,7 @@ class EducationFactory extends Factory
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->where('role_id', '=', 2)
             ->get()->random()->id;
-        $title = fake()->sentence(fake()->numberBetween(4, 5));
+        $title = fake()->unique()->sentence(fake()->numberBetween(4, 5));
         $body = fake()->paragraph(fake()->numberBetween(5, 20));
         $category = ['Kopi Asik', 'Sumedang Kopi', 'Pejuang Coffee', 'Benih Coffee'];
         return [
