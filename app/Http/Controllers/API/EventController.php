@@ -106,7 +106,7 @@ class EventController extends Controller
         try {
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = '/home/scoffema/public_html/images/events/';
+            $destination = 'images/events/';
             $request->file('image')->move($destination, $image);
 
             if (Auth::user()->hasRole('SuperAdmin')) {
@@ -212,7 +212,7 @@ class EventController extends Controller
         if ($request->hasFile('image')) {
             $oldImage = $event->image;
             if ($oldImage) {
-                $pleaseRemove = '/home/scoffema/public_html/images/events/' .  $oldImage;
+                $pleaseRemove = 'images/events/' .  $oldImage;
 
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
@@ -221,7 +221,7 @@ class EventController extends Controller
 
             $extension = $request->file('image')->getClientOriginalExtension();
             $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-            $destination = '/home/scoffema/public_html/images/events/';
+            $destination = 'images/events/';
             $request->file('image')->move($destination, $image);
 
             $event->update([
@@ -263,7 +263,7 @@ class EventController extends Controller
         }
         $oldImage = $event->image;
         if ($oldImage) {
-            $pleaseRemove = '/home/scoffema/public_html/images/events/' . $oldImage;
+            $pleaseRemove = 'images/events/' . $oldImage;
 
             if (file_exists($pleaseRemove)) {
                 unlink($pleaseRemove);

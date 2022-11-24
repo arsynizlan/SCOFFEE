@@ -147,7 +147,7 @@ class ForumController extends Controller
             if ($request->file('image')) {
                 $extension = $request->file('image')->getClientOriginalExtension();
                 $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                $destination = '/home/scoffema/public_html/images/posting/';
+                $destination = 'images/posting/';
                 $request->file('image')->move($destination, $image);
             }
             // dd('masuk');
@@ -227,7 +227,7 @@ class ForumController extends Controller
             // dd($request->image);
             if ($request->hasFile('image')) {
                 if ($postingan->image) {
-                    $pleaseRemove = '/home/scoffema/public_html/images/posting/' . $oldImage;
+                    $pleaseRemove = 'images/posting/' . $oldImage;
                     if (file_exists($pleaseRemove)) {
                         unlink($pleaseRemove);
                     }
@@ -235,10 +235,10 @@ class ForumController extends Controller
 
                 $extension = $request->file('image')->getClientOriginalExtension();
                 $image = strtotime(date('Y-m-d H:i:s')) . '.' . $extension;
-                $destination = '/home/scoffema/public_html/images/posting/';
+                $destination = 'images/posting/';
                 $request->file('image')->move($destination, $image);
             } else {
-                $pleaseRemove = '/home/scoffema/public_html/images/posting/' . $oldImage;
+                $pleaseRemove = 'images/posting/' . $oldImage;
                 if (file_exists($pleaseRemove)) {
                     unlink($pleaseRemove);
                 }
