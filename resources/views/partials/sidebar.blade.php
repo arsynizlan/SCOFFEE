@@ -93,7 +93,7 @@
 
                 <li class="sidebar-item {{ Request::segment(2) === 'events' ? 'active' : '' }}">
                     <a href="{{ url('/p/events') }}" class='sidebar-link'>
-                        <i class="bi bi-chat-dots-fill"></i>
+                        <i class="bi bi-calendar-event"></i>
                         <span>Event</span>
                     </a>
                 </li>
@@ -101,7 +101,7 @@
                 @role('Admin')
                     <li class="sidebar-item {{ Request::segment(2) === 'education' ? 'active' : '' }}">
                         <a href="{{ url('/p/education') }}" class='sidebar-link'>
-                            <i class="bi bi-chat-dots-fill"></i>
+                            <i class="bi bi-journal-text"></i>
                             <span>Education</span>
                         </a>
                     </li>

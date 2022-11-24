@@ -28,9 +28,7 @@ Route::group([], function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::group(['middleware' => ['auth', 'role:SuperAdmin|Admin']], function () {
-        route::get('/dashboard', function () {
-            return view('dashboard');
-        });
+        require __DIR__ . '/web/dashboard.php';
         Route::prefix('p')->group(function () {
             Route::get('/events', [PersonalEventController::class, 'index']);
             Route::get('/events/{id}', [PersonalEventController::class, 'show']);
