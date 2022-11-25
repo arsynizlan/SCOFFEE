@@ -30,7 +30,7 @@ class EventFactory extends Factory
 
         return [
             'user_id' => $model,
-            'image' => '(' . fake()->numberBetween(1, 13) . ')' . '.png',
+            'image' => 'events (' . fake()->numberBetween(1, 13) . ')' . '.png',
             'title' => $title,
             'slug' => Str::slug($title),
             'date' => fake()->date,
