@@ -36,7 +36,7 @@ class EventController extends Controller
                 'events.created_at',
                 'events.updated_at'
             )
-            ->latest()->paginate(6);
+            ->latest('events.id')->paginate(6);
         // $events = Event::where('status_publish', '1')->latest()->paginate(5);
         // foreach ($events as $event) {
         //     $event->image = $event->imagePathEvent;
@@ -79,7 +79,7 @@ class EventController extends Controller
                 'events.created_at',
                 'events.updated_at'
             )
-            ->latest()->Paginate(5);;
+            ->latest('events.id')->Paginate(5);;
         return successResponse(200, 'success', 'List Event', $events);
     }
 

@@ -36,7 +36,7 @@ class EducationController extends Controller
                     'educations.updated_at'
                 )
                 ->where('category', '=', $category)
-                ->latest()->paginate(5);
+                ->latest('educations.id')->paginate(5);
             if ($educations->total() == 0) {
                 return errorResponse(404, 'Error', 'Belum ada data');
             }
@@ -55,7 +55,7 @@ class EducationController extends Controller
                 'educations.created_at',
                 'educations.updated_at'
             )
-            ->latest()->paginate(5);
+            ->latest('educations.id')->paginate(5);
         return successResponse(200, 'success', 'List education', $educations);
     }
 
