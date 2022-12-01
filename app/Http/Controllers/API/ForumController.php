@@ -101,7 +101,7 @@ class ForumController extends Controller
                     'forums.image as image',
                 )
                 ->where('categories.name', '=', $category)
-                ->latest('id')->paginate(5);
+                ->latest('forums.id')->paginate(5);
             if ($forum->total() == 0) {
                 return errorResponse(404, 'Error', 'Belum ada data');
             }
@@ -119,6 +119,7 @@ class ForumController extends Controller
                 'forums.image'
             )
             ->withCount('comments as total_comment')
+            ->latest('forums.id')
             ->paginate(5);
         return successResponse(200, 'success', 'Forums', $comments);
     }
