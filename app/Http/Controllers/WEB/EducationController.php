@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Education;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -169,7 +170,8 @@ class EducationController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'title' => 'unique:educations',
+            'title' => ['required', Rule::unique('educations', 'title')->ignore($id)]
+
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {

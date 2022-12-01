@@ -5,6 +5,7 @@ namespace App\Http\Controllers\WEB;
 use Exception;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
@@ -145,7 +146,9 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => 'unique:categories',
+            'name' => ['required', Rule::unique('categories', 'name')->ignore($id)],
+
+
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {

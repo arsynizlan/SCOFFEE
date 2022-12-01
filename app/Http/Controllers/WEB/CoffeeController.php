@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Coffee;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
@@ -160,7 +161,7 @@ class CoffeeController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => 'unique:coffees',
+            'name' => ['required', Rule::unique('coffees', 'name')->ignore($id)],
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {

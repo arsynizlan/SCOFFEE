@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Event;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -186,7 +187,7 @@ class PersonalEventController extends Controller
     {
 
         $rules = [
-            'title' => 'unique:events',
+            'title' => ['required', Rule::unique('events', 'title')->ignore($id)]
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
