@@ -31,18 +31,8 @@ class CoffeeController extends Controller
                 'coffees.created_at',
                 'coffees.updated_at'
             )
-            ->latest()->paginate(5);
+            ->latest('coffees.id')->paginate(5);
         return successResponse(200, 'success', 'List Kopi', $coffees);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -133,17 +123,6 @@ class CoffeeController extends Controller
             return errorResponse(404, 'error', 'Not Found');
         }
         return successResponse(200, 'success', 'Detail Kopi', $coffees);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

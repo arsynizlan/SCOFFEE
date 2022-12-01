@@ -30,6 +30,7 @@ class ForumController extends Controller
                 'forums.image'
             )
             ->where('categories.name', '=', $category)
+            ->latest('forums.id')
             ->withCount('comments as total_comment')
             ->paginate(5);
         if ($forum->total() == 0) {

@@ -53,17 +53,6 @@ class CommentController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -113,7 +102,6 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-
         Comment::destroy($comment->id);
         return successResponse(200, 'success', 'comment Delete', null);
     }
