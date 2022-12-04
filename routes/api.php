@@ -36,6 +36,7 @@ Route::group([], function () {
 
         require __DIR__ . '/api/forum.php';
         require __DIR__ . '/api/comment.php';
+        require __DIR__ . '/api/like.php';
 
 
         Route::get('/category', [CategoryController::class, 'index']);

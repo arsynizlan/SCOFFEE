@@ -4,13 +4,14 @@ namespace App\Http\Controllers\API;
 
 
 use Exception;
+use App\Models\Like;
 use App\Models\Forum;
 use App\Models\Category;
+use Termwind\Components\Dd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use Termwind\Components\Dd;
 
 class ForumController extends Controller
 {
@@ -32,6 +33,7 @@ class ForumController extends Controller
             ->where('categories.name', '=', $category)
             ->latest('forums.id')
             ->withCount('comments as total_comment')
+            ->withCount('likes as total_like')
             ->paginate(5);
         if ($forum->total() == 0) {
             return errorResponse(404, 'Error', 'Belum ada data');
@@ -71,10 +73,13 @@ class ForumController extends Controller
                 'comments.created_at'
             )
             ->where('forums.id', '=', $id)
-            ->latest('comments.id')->paginate(5,);
+            ->latest('comments.id')->paginate(5);
+
+        $likes = Like::where('forum_id', $id)->count();
 
         $data = [
             'forums' => $forum,
+            'total_likes' => $likes,
             'comments' => $comments,
         ];
         return successResponse(200, 'success', 'Forum with comment', $data);
@@ -119,6 +124,7 @@ class ForumController extends Controller
                 'forums.image'
             )
             ->withCount('comments as total_comment')
+            ->withCount('likes as total_like')
             ->latest('forums.id')
             ->paginate(5);
         return successResponse(200, 'success', 'Forums', $comments);
@@ -153,7 +159,7 @@ class ForumController extends Controller
                 $request->file('image')->move($destination, $image);
             }
             // dd('masuk');
-            $event = Forum::create([
+            $forum = Forum::create([
                 'user_id' => auth()->user()->id,
                 'category_id' => $request->category_id,
                 'context_id' => $request->context_id,
@@ -163,7 +169,7 @@ class ForumController extends Controller
         } catch (Exception $e) {
             return errorResponse(400, 'Error', $e);
         }
-        return successResponse(201, 'success', 'Postingan Berhasil', $event);
+        return successResponse(201, 'success', 'Postingan Berhasil', $forum);
     }
 
     /**
@@ -188,12 +194,13 @@ class ForumController extends Controller
                 'users.name as user'
             )
             ->first();
-
+        $likes = Like::where('forum_id', $id)->count();
         $image = asset('images/posting/' . $forum->image);
 
         $data = [
-            $forum,
-            $image
+            'forums' => $forum,
+            'total_like' => $likes,
+            'image' => $image,
         ];
 
         if ($forum) {
