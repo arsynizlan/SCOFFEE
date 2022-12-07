@@ -24,6 +24,7 @@ class ForumController extends Controller
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->select(
                 'forums.id as forum_id',
+                'users.id as user_id',
                 'categories.name as category',
                 'contexts.name as context',
                 'users.name',
@@ -55,6 +56,7 @@ class ForumController extends Controller
             ->join('users', 'forums.user_id', '=', 'users.id')
             ->select(
                 'forums.id',
+                'users.id as user_id',
                 'users.name as user',
                 'categories.name as category',
                 'contexts.name as context',
@@ -99,6 +101,7 @@ class ForumController extends Controller
                 ->join('users', 'forums.user_id', '=', 'users.id')
                 ->select(
                     'forums.id',
+                    'users.id as user_id',
                     'users.name as user',
                     'categories.name as category',
                     'contexts.name as context',
@@ -117,6 +120,7 @@ class ForumController extends Controller
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->select(
                 'forums.id as forum_id',
+                'users.id as user_id',
                 'categories.name as category',
                 'contexts.name as context',
                 'users.name',
@@ -187,6 +191,7 @@ class ForumController extends Controller
             ->where('forums.id', '=', $id)
             ->select(
                 'forums.id',
+                'users.id as user_id',
                 'categories.name as category',
                 'contexts.name as context',
                 'forums.description',
