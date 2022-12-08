@@ -18,11 +18,13 @@ class ForumController extends Controller
     public function forumByUser()
     {
         $forum = Forum::join('users', 'forums.user_id', '=', 'users.id')
+            ->join('user_details', 'users.id' ,'=', 'user_details.user_id')
             ->join('contexts', 'forums.context_id', '=', 'contexts.id')
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->select(
                 'forums.id as forum_id',
                 'users.id as user_id',
+                'user_details.image as user_image',
                 'categories.name as category',
                 'contexts.name as context',
                 'users.name',
@@ -45,11 +47,13 @@ class ForumController extends Controller
         // dd($id);
         $category = $id;
         $forum = Forum::join('users', 'forums.user_id', '=', 'users.id')
+            ->join('user_details', 'users.id' ,'=', 'user_details.user_id')
             ->join('contexts', 'forums.context_id', '=', 'contexts.id')
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->select(
                 'forums.id as forum_id',
                 'users.id as user_id',
+                'user_details.image as user_image',
                 'categories.name as category',
                 'contexts.name as context',
                 'users.name',
@@ -79,9 +83,11 @@ class ForumController extends Controller
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->join('contexts', 'forums.context_id', '=', 'contexts.id')
             ->join('users', 'forums.user_id', '=', 'users.id')
+            ->join('user_details', 'users.id' ,'=', 'user_details.user_id')
             ->select(
                 'forums.id',
                 'users.id as user_id',
+                'user_details.image as user_image',
                 'users.name as user',
                 'categories.name as category',
                 'contexts.name as context',
@@ -92,9 +98,11 @@ class ForumController extends Controller
             ->first();
         $comments = DB::table('comments')
             ->join('users', 'comments.user_id', '=', 'users.id')
+            ->join('user_details', 'users.id' ,'=', 'user_details.user_id')
             ->join('forums', 'comments.forum_id', '=', 'forums.id')
             ->select(
                 'users.id',
+                'user_details.image as user_image',
                 'users.name as user',
                 'comments.content',
                 'comments.created_at'
@@ -124,9 +132,11 @@ class ForumController extends Controller
                 ->join('categories', 'forums.category_id', '=', 'categories.id')
                 ->join('contexts', 'forums.context_id', '=', 'contexts.id')
                 ->join('users', 'forums.user_id', '=', 'users.id')
+                ->join('user_details', 'users.id' ,'=', 'user_details.user_id')
                 ->select(
                     'forums.id',
                     'users.id as user_id',
+                    'user_details.image as user_image',
                     'users.name as user',
                     'categories.name as category',
                     'contexts.name as context',
@@ -141,11 +151,13 @@ class ForumController extends Controller
             return successResponse(200, 'success', 'Forum by category ' . $category, $forum);
         }
         $comments = Forum::join('users', 'forums.user_id', '=', 'users.id')
+            ->join('user_details', 'users.id' ,'=', 'user_details.user_id')
             ->join('contexts', 'forums.context_id', '=', 'contexts.id')
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->select(
                 'forums.id as forum_id',
                 'users.id as user_id',
+                'user_details.image as user_image',
                 'categories.name as category',
                 'contexts.name as context',
                 'users.name',
@@ -213,10 +225,12 @@ class ForumController extends Controller
             ->join('categories', 'forums.category_id', '=', 'categories.id')
             ->join('contexts', 'forums.context_id', '=', 'contexts.id')
             ->join('users', 'forums.user_id', '=', 'users.id')
+            ->join('user_details', 'users.id' ,'=', 'user_details.user_id')
             ->where('forums.id', '=', $id)
             ->select(
                 'forums.id',
                 'users.id as user_id',
+                'user_details.image as user_image',
                 'categories.name as category',
                 'contexts.name as context',
                 'forums.description',
