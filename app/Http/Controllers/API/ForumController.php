@@ -15,6 +15,31 @@ use Illuminate\Support\Facades\Validator;
 
 class ForumController extends Controller
 {
+    public function forumByUser()
+    {
+        $forum = Forum::join('users', 'forums.user_id', '=', 'users.id')
+            ->join('contexts', 'forums.context_id', '=', 'contexts.id')
+            ->join('categories', 'forums.category_id', '=', 'categories.id')
+            ->select(
+                'forums.id as forum_id',
+                'users.id as user_id',
+                'categories.name as category',
+                'contexts.name as context',
+                'users.name',
+                'forums.description',
+                'forums.image'
+            )
+            ->where('forums.user_id','=', auth()->user()->id)
+            ->withCount('comments as total_comment')
+            ->withCount('likes as total_like')
+            ->latest('forums.id')
+            ->paginate(5);
+        if ($forum->total() == 0) {
+            return successResponse(404, 'success', 'Belum Membuat Postingan', $postingan = 0);
+        }
+        return successResponse(200, 'success', 'Forum by User', $forum);
+    }
+
     public function groupCategory($id)
     {
         // dd($id);

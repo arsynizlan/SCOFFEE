@@ -10,4 +10,4 @@ Route::post('/posting/{id}', [ForumController::class, 'update']);
 Route::delete('/posting/{id}', [ForumController::class, 'destroy']);
 Route::get('/posting/{id}/comment', [ForumController::class, 'forumComment']);
 Route::get('/category/{category}/relationships/posting', [ForumController::class, 'groupCategory']);
-// Route::get('/postings', [ForumController::class, 'groupCategory']);
+Route::get('/profile', [ForumController::class, 'forumByUser']);
