@@ -18,6 +18,26 @@ Frontend Application : https://github.com/TaufikAk/sumedang
 
 https://documenter.getpostman.com/view/23772346/2s8Yesrs9y#187aadb1-71b6-4e6f-b386-cda445518064
 
+## How to Install and Run the Project
+Docker and Docker-Compose (Required)
+
+1. Run ```git clone git@github.com:arsynizlan/SCOFFEE.git```
+2. Run ```cd src```
+3. Copy ```.env.example``` to ```.env```
+4. Run ```docker-compose build```
+5. Run ```docker-compose up -d```
+6. Run ```docker-compose exec app composer install```
+7. Run ```docker-compose exec app php artisan key:generate```
+8. Run ```docker-compose exec app php artisan migrate```
+9. Run ```docker-compose exec app php artisan db:seed```
+10. You can see the project on```127.0.0.1:8080```
+
+## How to use PostgreSQL as a database
+1. Change ```DB_CONNECTION = pgsql``` 
+2. Change ```DB_HOST = db``` 
+3. Change ```DB_PORT = 5432``` 
+4. Open PgAdmin4 ```127.0.0.1:5050``` 
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

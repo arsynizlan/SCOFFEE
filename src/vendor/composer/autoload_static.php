@@ -583,6 +583,7 @@ class ComposerStaticInit52a47b0dede00182a1565144dfa39b51
         'App\\Http\\Controllers\\API\\EducationController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/EducationController.php',
         'App\\Http\\Controllers\\API\\EventController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/EventController.php',
         'App\\Http\\Controllers\\API\\ForumController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/ForumController.php',
+        'App\\Http\\Controllers\\API\\LikeController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/LikeController.php',
         'App\\Http\\Controllers\\API\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/UserController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\WEB\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/WEB/AuthController.php',
